@@ -6,6 +6,7 @@ bitset<CAPACITY> mapped;
 vector<cipher_block> res[1 << K];
 
 void init(){
+	make_p();
 	keysname = "key-0";
 	decode = vector<vector<cipher_block>>(1 << K);
 	rescount = vector<int>(1 << K, 0);
