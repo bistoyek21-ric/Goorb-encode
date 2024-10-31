@@ -26,7 +26,6 @@ SOFTWARE.
 
 signed main(){
 	init();
-	make_p();
 	while(true){
 		cls();
 		cout << "Goorb encode 1" << '\n';
