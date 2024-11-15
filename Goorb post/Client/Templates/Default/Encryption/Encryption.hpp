@@ -64,7 +64,8 @@ class Client{
         #if defined(__unix__) || defined(__APPLE__)
         auto t = &timeout;
         #else
-        auto t = reinterpret_cast<const char*>(&timeout);
+        int ms = 1000;
+        char* t = (char*)&ms;
         #endif
         if(setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, t, sizeof(timeout)) < 0){
             cout << "Error setting socket options" << '\n';
