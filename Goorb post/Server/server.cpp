@@ -92,7 +92,7 @@ void handleSignal(int signal){
 #endif
 
 int main(){
-    #if defined(__unix__) || defined(__APPLE__)
+    	#if defined(__unix__) || defined(__APPLE__)
 	signal(SIGINT, handleSignal);
 	signal(SIGTERM, handleSignal);
 	#endif
@@ -100,13 +100,13 @@ int main(){
 	std::cout << "Raz protocol\n";
 	std::cout << "Created by: 21\n";
 	std::cout << "____________________________________________________\n\n";
-    #if !defined(__unix__) && !defined(__APLLE__)
-    WSADATA wsaData;
-    if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
-        std::cerr << "WSAStartup failed" << std::endl;
-        return 1;
-    }
-    #endif
+    	#if !defined(__unix__) && !defined(__APLLE__)
+    	WSADATA wsaData;
+    	if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
+        	std::cerr << "WSAStartup failed" << std::endl;
+        	return 1;
+    	}
+    	#endif
 	char host[256];
 	gethostname(host, sizeof(host));
 	std::cout << "Server IP: " << inet_ntoa(*((struct in_addr*)gethostbyname(host)->h_addr_list[0])) << '\n';
@@ -141,49 +141,50 @@ int main(){
 			continue;
 		}
 		struct timeval timeout;
-        timeout.tv_sec = 1;
-        timeout.tv_usec = 0;
-        #if defined(__unix__) || defined(__APPLE__)
-        auto t = &timeout;
-        #else
-        auto t = reinterpret_cast<const char*>(&timeout);
-        #endif
-        if(setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, t, sizeof(timeout)) < 0){
-            std::cout << "Error setting socket options" << '\n';
-            return 1;
-        }
+        	timeout.tv_sec = 1;
+        	timeout.tv_usec = 0;
+        	#if defined(__unix__) || defined(__APPLE__)
+        	auto t = &timeout;
+        	#else
+        	int ms = 1000;
+        	char* t = (char*)&ms;
+        	#endif
+        	if(setsockopt(client_socket, SOL_SOCKET, SO_RCVTIMEO, t, sizeof(timeout)) < 0){
+            		std::cout << "Error setting socket options" << '\n';
+            		return 1;
+        	}
 		std::cout << "Connection from " << inet_ntoa(client_addr.sin_addr) << std::endl;
 		client[i] = client_socket;
 	}
 	for(int i = 0; i < 2; ++i)
-        send(client[i], "0 ", 2, 0);
-    char c[1];
-    bool b = true;
-    std::cout << "You can stop the server by pressing '~' key\n";
+        	send(client[i], "0 ", 2, 0);
+	char c[1];
+	bool b = true;
+	std::cout << "You can stop the server by pressing '~' key\n";
 	for(int i = 0; b; i = 1 - i){
-        while(b){
-            if(kbhit() && getch() == '~')
-                b = false;
-            if(recv(client[i], c, 1, 0) <= 0 || c[0] == '~')
-                break;
-            if(c[0] == '!'){
-                send(client[i], c, 1, 0);
-                continue;
-            }
-            send(client[1 - i], c, 1, 0);
-        }
-        if(c[0] == '~')
-            break;
-    }
-    for(int i = 0; i < 2; ++i)
-        send(client[i], "0 0 ", 4, 0);
-    close(client[0]);
-    close(client[1]);
-    close(server_socket_);
-    #if !defined(__unix__) && !defined(__APPLE__)
-    WSACleanup();
-    #endif
-    time_t t = time(nullptr);
-    while(time(nullptr) - t < 3);
+		while(b){
+			if(kbhit() && getch() == '~')
+				b = false;
+			if(recv(client[i], c, 1, 0) <= 0 || c[0] == '~')
+				break;
+			if(c[0] == '!'){
+				send(client[i], c, 1, 0);
+				continue;
+			}
+			send(client[1 - i], c, 1, 0);
+		}
+		if(c[0] == '~')
+			break;
+	}
+	for(int i = 0; i < 2; ++i)
+        	send(client[i], "0 0 ", 4, 0);
+	close(client[0]);
+	close(client[1]);
+	close(server_socket_);
+	#if !defined(__unix__) && !defined(__APPLE__)
+	WSACleanup();
+	#endif
+	time_t t = time(nullptr);
+	while(time(nullptr) - t < 3);
 	return 0;
 }
