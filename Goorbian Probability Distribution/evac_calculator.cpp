@@ -26,15 +26,15 @@ SOFTWARE.
 using namespace std;
 
 // Stirling's formula:
-// fact(i) =  i * ln(i) - i + ln(2PIi)
-// fact'(i) = ln(i) + 1/i
+// fact(i) =  i * ln(i) - i + 0.5 * ln(2PIi)
+// fact'(i) = ln(i) + 0.5/i
 
 // Definition of F(i, k):
 // F(i, k) = e(i) -> I ~ GOORB(n, k)
 
 // F(i, k) and It's derivative by respect k in this problem the i is given:
 // F(i, k) =  (k - i) * ln(n - 1) - (k - 1) * ln(n) + fact(k) - fact(i) - fact(k - i)
-// F(i, k)/dk = ln(n - 1) - ln(n) + k'fact'(k) - (k - i)'fact'(k - i)
+// F(i, k)/dk = ln(n - 1) - ln(n) + fact'(k) - fact'(k - i)
 
 // Solution: At first we need know what is the pick of F(i, k) if the i is constant
 // since the graph has exactly 1 local maximum the answer is bigger than pick. And
@@ -43,7 +43,7 @@ using namespace std;
 double fact(int64_t n){
     if(n <= 1)// fact(i) is a function for approximation of ln(i!)
         return 0;
-    return (n + 1) * (log(n) - 1) + log(2 * M_PI) + 1;
+    return n * log(n) - n + 0.5 * (log(2) + log(M_PI) + log(n));
 }
 
 int main(){
@@ -54,28 +54,38 @@ int main(){
     while(true){
         int64_t n, i;
         double e;
+        cout << "*inputs have to be valid*\n";
         cout << "n : ";
         cin >> n;
         cout << "i : ";
         cin >> i;
-        cout << "epsilon: ";
+        cout << "epsilon : ";
         cin >> e;
-        int64_t l = 0, r = 1e18; // r = max(1e18, n * n * i) was the right upper bound but numbers are bounded in computers
+        int64_t l = 2 * i, r = 1e18; // r = n * n * (i + 1) was the right upper bound but numbers are bounded in computers
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
             // Checking when F(i, mid)/d(mid) will be non-positive
-            if(log(mid) - log(mid - i) + 1.0/mid - 1.0/(mid - i) <= log(n) - log(n - 1))
+            if(log(mid) - log(mid - i) + 0.5/mid - 0.5/(mid - i) <= log(n) - log(n - 1))
                 r = mid;
             else
                 l = mid;
         }
         //   At first we simulated the graph with a function F: R^2 -> R but in fact k can only be non-negative integer
         // so there is still a chance that F(i, r) < F(i, r - 1) consider the fact that r can be real pick or it's ceil
+        double maxpop0 = (r - 1 - i) * log(n - 1) - (r - 1 - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - 1 - i);
+        double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - i);
         int integer_pick = r - 1;
-        if(2 * log(n) + log(r - i) < log(n - 1) + log(r)) // Simplified comparison of F(i, r) and F(i, r - 1)
+        if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, r - 1)
             integer_pick = r;
         cout << "-------------\n";
         cout << " pick of this place is in k = " << integer_pick << '\n';
+        cout << " with this population ~= " << exp(max(maxpop0, maxpop1)) << '\n';
+        if(max(maxpop0, maxpop1) < log(e)){
+            cout << "-------------\n";
+            cout << " -> evac(" << i << ", " << e << ") = " << 0 << '\n';
+            cout << "___________________________________\n";
+            continue;
+        }
         l = integer_pick, r = 1e18;
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
