@@ -50,11 +50,11 @@ int main(){
     cout << "Goorb encode Project\n";
     cout << "Author: Kasra Fouladi\n";
     cout << "Company: bistoyek(21)\n";
-    cout << "Calculator of evac(i, epsilon) in I ~ GOORB(n, k)\n";
+    cout << "Calculator of evac(i, epsilon) in I ~ GOORB(n, k)\n_____________\n";
     while(true){
         int64_t n, i;
         double e;
-        cout << "*inputs have to be valid*\n";
+        cout << "** inputs have to be valid **\n";
         cout << "n : ";
         cin >> n;
         cout << "i : ";
@@ -74,11 +74,11 @@ int main(){
         // so there is still a chance that F(i, r) < F(i, r - 1) consider the fact that r can be real pick or it's ceil
         double maxpop0 = (r - 1 - i) * log(n - 1) - (r - 1 - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - 1 - i);
         double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - i);
-        int integer_pick = r - 1;
+        int64_t integer_peak = r - 1;
         if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, r - 1)
-            integer_pick = r;
+            integer_peak = r;
         cout << "-------------\n";
-        cout << " pick of this place is in k = " << integer_pick << '\n';
+        cout << " peak of this place is in k = " << integer_peak << '\n';
         cout << " with this population ~= " << exp(max(maxpop0, maxpop1)) << '\n';
         if(max(maxpop0, maxpop1) < log(e)){
             cout << "-------------\n";
@@ -86,7 +86,7 @@ int main(){
             cout << "___________________________________\n";
             continue;
         }
-        l = integer_pick, r = 1e18;
+        l = integer_peak, r = 1e18;
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
             if((mid - i) * log(n - 1) - (mid - 1) * log(n) + fact(mid) - fact(i) - fact(mid - i) <= log(e))
@@ -94,7 +94,7 @@ int main(){
             else
                 l = mid;
         }
-        int res = r;
+        int64_t res = r;
         if((l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i) <= log(e))
             res = l;
         cout << "-------------\n";
