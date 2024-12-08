@@ -58,11 +58,15 @@ int main(){
     cout << "Goorb encode Project\n";
     cout << "Author: Kasra Fouladi\n";
     cout << "Company: bistoyek(21)\n";
-    cout << "Calculator of evac(i, epsilon) in I ~ GOORB(n, k)\n";
+    cout << "Calculator of evac(i, epsilon) in I ~ GOORB(n, k)\n_____________\n";
     while(true){
         int64_t n, i;
         double e;
+<<<<<<< HEAD
         cout << " **inputs have to be valid**  n, (i+1) in N   &   epsilon in R+ \n";
+=======
+        cout << "** inputs have to be valid **\n";
+>>>>>>> 5de8cbcf219c48fa53814ca21ca212bc6f2d2232
         cout << "n : ";
         cin >> n;
         cout << "i : ";
@@ -83,13 +87,21 @@ int main(){
         }
         //   At first we simulated the graph with a function F: R^2 -> R but in fact k can only be non-negative integer
         // so there is still a chance that F(i, r) < F(i, r - 1) consider the fact that r can be real pick or it's ceil
+<<<<<<< HEAD
         double maxpop0 = (l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i);
         double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r) - fact(i) - fact(r - i);
         int integer_pick = l;
         if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, l) (we know: l + 1 = r and l < peak_k <= r)
             integer_pick = r;
+=======
+        double maxpop0 = (r - 1 - i) * log(n - 1) - (r - 1 - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - 1 - i);
+        double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - i);
+        int64_t integer_peak = r - 1;
+        if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, r - 1)
+            integer_peak = r;
+>>>>>>> 5de8cbcf219c48fa53814ca21ca212bc6f2d2232
         cout << "-------------\n";
-        cout << " pick of this place is in k = " << integer_pick << '\n';
+        cout << " peak of this place is in k = " << integer_peak << '\n';
         cout << " with this population ~= " << exp(max(maxpop0, maxpop1)) << '\n';
         if(max(maxpop0, maxpop1) < log(e)){ // Checking if the epsilon is unreachable
             cout << "-------------\n";
@@ -97,6 +109,7 @@ int main(){
             cout << "___________________________________\n";
             continue;
         }
+<<<<<<< HEAD
         else if(max(maxpop0, maxpop1) == log(e)){ // Checking if the epsilon is reachable in peak
             cout << "-------------\n";
             cout << " -> evac(" << i << ", " << e << ") = " << integer_pick << '\n';
@@ -105,6 +118,9 @@ int main(){
         }
         // Know there is a sorted limited sequance and the problem could be solved by apply another binary searche
         l = integer_pick, r = upper_bound_of_k;
+=======
+        l = integer_peak, r = 1e18;
+>>>>>>> 5de8cbcf219c48fa53814ca21ca212bc6f2d2232
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
             if((mid - i) * log(n - 1) - (mid - 1) * log(n) + fact(mid) - fact(i) - fact(mid - i) <= log(e))
@@ -113,6 +129,11 @@ int main(){
                 l = mid;
         }
         int64_t res = r;
+<<<<<<< HEAD
+=======
+        if((l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i) <= log(e))
+            res = l;
+>>>>>>> 5de8cbcf219c48fa53814ca21ca212bc6f2d2232
         cout << "-------------\n";
         cout << " -> evac(" << i << ", " << e << ") = " << res << '\n';
         cout << "___________________________________\n";
