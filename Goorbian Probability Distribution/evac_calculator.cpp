@@ -30,11 +30,19 @@ using namespace std;
 // fact'(i) = ln(i) + 0.5/i
 
 // Definition of F(i, k):
-// F(i, k) = e(i) -> I ~ GOORB(n, k)
+// F(i, k) = e(i) -> I ~ GOORB(n, k) , but it's generalized for real non-negative values of k
 
 // F(i, k) and It's derivative by respect k in this problem the i is given:
 // F(i, k) =  (k - i) * ln(n - 1) - (k - 1) * ln(n) + fact(k) - fact(i) - fact(k - i)
-// F(i, k)/dk = ln(n - 1) - ln(n) + fact'(k) - fact'(k - i)
+
+// d(F(i, k))/dk = ln(n - 1) - ln(n) + d(fact(k))/dk - d(fact(k - i))/dk
+// d(F(i, k))/dk = ln(n - 1) - ln(n) + ln(k) + 0.5/k - ln(k - i) + 0.5/(k - i)
+
+// d2(F(i, k))/(dk)^2 = 1/k - 1 / (k - i) - 0.5 / (k * k) - 0.5 / ((k - i) * (k - i)) < 0  (for any k > i)
+
+//   In range (i, inf] d(F(i, k))/dk is strictly decreasing because d2(F(i, k))/(dk)^2 is negative in all of this range
+// so F(i, k) just has one 1 extermom
+
 
 // Solution: At first we need know what is the pick of F(i, k) if the i is constant
 // since the graph has exactly 1 local maximum the answer is bigger than pick. And
@@ -54,17 +62,20 @@ int main(){
     while(true){
         int64_t n, i;
         double e;
-        cout << "*inputs have to be valid*\n";
+        cout << " **inputs have to be valid**  n, (i+1) in N   &   epsilon in R+ \n";
         cout << "n : ";
         cin >> n;
         cout << "i : ";
         cin >> i;
         cout << "epsilon : ";
         cin >> e;
-        int64_t l = 2 * i, r = 1e18; // r = n * n * (i + 1) was the right upper bound but numbers are bounded in computers
+        // Since there is just 1 peak answer is binary searchable so we can find an integer k that: k < peak_k <= k + 1
+        int64_t upper_bound_of_k = (1ULL << 63) - 1; // 17 * n * (i + 1) * lg(n * (i + 1) / min{epsilon, 1}) was the right upper bound but numbers are bounded in computers
+        // For any k < i i-th place will be empty so l = i
+        int64_t l = i, r = upper_bound_of_k;
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
-            // Checking when F(i, mid)/d(mid) will be non-positive
+            // Checking when d(F(i, mid))/d(mid) will be non-positive
             if(log(mid) - log(mid - i) + 0.5/mid - 0.5/(mid - i) <= log(n) - log(n - 1))
                 r = mid;
             else
@@ -72,21 +83,28 @@ int main(){
         }
         //   At first we simulated the graph with a function F: R^2 -> R but in fact k can only be non-negative integer
         // so there is still a chance that F(i, r) < F(i, r - 1) consider the fact that r can be real pick or it's ceil
-        double maxpop0 = (r - 1 - i) * log(n - 1) - (r - 1 - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - 1 - i);
-        double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r - 1) - fact(i) - fact(r - i);
-        int integer_pick = r - 1;
-        if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, r - 1)
+        double maxpop0 = (l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i);
+        double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r) - fact(i) - fact(r - i);
+        int integer_pick = l;
+        if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, l) (we know: l + 1 = r and l < peak_k <= r)
             integer_pick = r;
         cout << "-------------\n";
         cout << " pick of this place is in k = " << integer_pick << '\n';
         cout << " with this population ~= " << exp(max(maxpop0, maxpop1)) << '\n';
-        if(max(maxpop0, maxpop1) < log(e)){
+        if(max(maxpop0, maxpop1) < log(e)){ // Checking if the epsilon is unreachable
             cout << "-------------\n";
             cout << " -> evac(" << i << ", " << e << ") = " << 0 << '\n';
             cout << "___________________________________\n";
             continue;
         }
-        l = integer_pick, r = 1e18;
+        else if(max(maxpop0, maxpop1) == log(e)){ // Checking if the epsilon is reachable in peak
+            cout << "-------------\n";
+            cout << " -> evac(" << i << ", " << e << ") = " << integer_pick << '\n';
+            cout << "___________________________________\n";
+            continue;
+        }
+        // Know there is a sorted limited sequance and the problem could be solved by apply another binary searche
+        l = integer_pick, r = upper_bound_of_k;
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
             if((mid - i) * log(n - 1) - (mid - 1) * log(n) + fact(mid) - fact(i) - fact(mid - i) <= log(e))
@@ -94,12 +112,12 @@ int main(){
             else
                 l = mid;
         }
-        int res = r;
-        if((l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i) <= log(e))
-            res = l;
+        int64_t res = r;
         cout << "-------------\n";
         cout << " -> evac(" << i << ", " << e << ") = " << res << '\n';
         cout << "___________________________________\n";
+        // Two binary searches on a sequances with atmost have upper_bound_of_k lenght so the worst case complexity is:
+        // O(lg(upper_bound_of_k)) -> O(lg(n) + lg(i + 1) + lg(max{lg(min{epsilon, 1}), 2}))
     }
     return 0;
 }
