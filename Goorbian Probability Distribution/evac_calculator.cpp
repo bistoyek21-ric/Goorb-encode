@@ -70,7 +70,7 @@ int main(){
         cout << "epsilon : ";
         cin >> e;
         // Since there is just 1 peak answer is binary searchable so we can find an integer k that: k < peak_k <= k + 1
-        int64_t upper_bound_of_k = (1ULL << 63) - 1; // 17 * n * (i + 1) * lg(n * (i + 1) / min{epsilon, 1}) was the right upper bound but numbers are bounded in computers
+        int64_t upper_bound_of_k = (1ULL << 63) - 1; // 16 * n * (i + 1) * lg(n * (i + 1) / min{epsilon, 1}) was the right upper bound but numbers are bounded in computers
         // For any k < i i-th place will be empty so l = i
         int64_t l = i, r = upper_bound_of_k;
         while(r - l > 1){
