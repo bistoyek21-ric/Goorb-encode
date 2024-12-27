@@ -72,16 +72,29 @@ int main(){
         // Since there is just 1 peak answer is binary searchable so we can find an integer k that: k < peak_k <= k + 1
         int64_t upper_bound_of_k = (1LL << 62); // 16 * n * (i + 1) * lg(n * (i + 1) / min{epsilon, 1/2}) was the right upper bound but numbers are bounded in computers
         // For any k < i i-th place will be empty so l = i
-        int64_t l = max(n * i - 1, 0), r = n * i;
-        //   At first we simulated the graph with a function F: R^2 -> R but in fact k can only be non-negative integer
+        #ifdef FASTER
+        // It could be shown that the peak and integer peak is always in [n * i - 1, n * i]
+        int64_t l = max(n * i - 1, 0LL), r = n * i;
+        #else
+        int64_t l = i, r = upper_bound_of_k;
+        while(r - l > 1){
+            int64_t mid = (r + l) / 2;
+            // Checking when d(F(i, mid))/d(mid) will be non-positive
+            if(log(mid) - log(mid - i) + 0.5/mid - 0.5/(mid - i) <= log(n) - log(n - 1))
+                r = mid;
+            else
+                l = mid;
+        }
+        #endif // FASTER
+        //   At first we simulated the graph with a function F: R^2 -> R but in fact k and i can only be non-negative integer
         // so there is still a chance that F(i, r) < F(i, r - 1) consider the fact that r can be real pick or it's ceil
         double maxpop0 = (l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i);
         double maxpop1 = (r - i) * log(n - 1) - (r - 1) * log(n) + fact(r) - fact(i) - fact(r - i);
-        int integer_pick = l;
+        int integer_peak = l;
         if(maxpop0 < maxpop1) // Comparison between F(i, r) and F(i, l) (we know: l + 1 = r and l < peak_k <= r)
-            integer_pick = r;
+            integer_peak = r;
         cout << "-------------\n";
-        cout << " pick of this place is in k = " << integer_pick << '\n';
+        cout << " pick of this place is in k = " << integer_peak << '\n';
         cout << " with this population ~= " << exp(max(maxpop0, maxpop1)) << '\n';
         if(max(maxpop0, maxpop1) < log(e)){ // Checking if the epsilon is unreachable
             cout << "-------------\n";
@@ -91,12 +104,12 @@ int main(){
         }
         else if(max(maxpop0, maxpop1) == log(e)){ // Checking if the epsilon is reachable in peak
             cout << "-------------\n";
-            cout << " -> evac(" << i << ", " << e << ") = " << integer_pick << '\n';
+            cout << " -> evac(" << i << ", " << e << ") = " << integer_peak << '\n';
             cout << "___________________________________\n";
             continue;
         }
         // Know there is a sorted limited sequance and the problem could be solved by apply another binary searche
-        l = integer_pick, r = upper_bound_of_k;
+        l = integer_peak, r = upper_bound_of_k;
         while(r - l > 1){
             int64_t mid = (r + l) / 2;
             if((mid - i) * log(n - 1) - (mid - 1) * log(n) + fact(mid) - fact(i) - fact(mid - i) <= log(e))
