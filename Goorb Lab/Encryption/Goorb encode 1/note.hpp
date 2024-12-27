@@ -68,7 +68,6 @@ void bank_info(){
 		len = max(len, cnt1 + 1);
 		f1.close();
 	}
-	cout << "Game's quality: " << quality / (calls * 1.0) << "\n---------\n";
 	cout << "All codes: " << sum << "\n---------\n";
 	for(int i = 0; i < len; ++i){
 		cout << cnt[i];

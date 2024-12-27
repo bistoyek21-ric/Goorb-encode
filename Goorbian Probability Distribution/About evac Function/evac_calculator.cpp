@@ -70,17 +70,9 @@ int main(){
         cout << "epsilon : ";
         cin >> e;
         // Since there is just 1 peak answer is binary searchable so we can find an integer k that: k < peak_k <= k + 1
-        int64_t upper_bound_of_k = (1ULL << 63) - 1; // 16 * n * (i + 1) * lg(n * (i + 1) / min{epsilon, 1}) was the right upper bound but numbers are bounded in computers
+        int64_t upper_bound_of_k = (1LL << 62); // 16 * n * (i + 1) * lg(n * (i + 1) / min{epsilon, 1/2}) was the right upper bound but numbers are bounded in computers
         // For any k < i i-th place will be empty so l = i
-        int64_t l = i, r = upper_bound_of_k;
-        while(r - l > 1){
-            int64_t mid = (r + l) / 2;
-            // Checking when d(F(i, mid))/d(mid) will be non-positive
-            if(log(mid) - log(mid - i) + 0.5/mid - 0.5/(mid - i) <= log(n) - log(n - 1))
-                r = mid;
-            else
-                l = mid;
-        }
+        int64_t l = max(n * i - 1, 0), r = n * i;
         //   At first we simulated the graph with a function F: R^2 -> R but in fact k can only be non-negative integer
         // so there is still a chance that F(i, r) < F(i, r - 1) consider the fact that r can be real pick or it's ceil
         double maxpop0 = (l - i) * log(n - 1) - (l - 1) * log(n) + fact(l) - fact(i) - fact(l - i);
@@ -117,7 +109,7 @@ int main(){
         cout << " -> evac(" << i << ", " << e << ") = " << res << '\n';
         cout << "___________________________________\n";
         // Two binary searches on a sequances with atmost have upper_bound_of_k lenght so the worst case complexity is:
-        // O(lg(upper_bound_of_k)) -> O(lg(n) + lg(i + 1) + lg(max{lg(min{epsilon, 1}), 2}))
+        // O(lg(upper_bound_of_k)) -> O(lg(n) + lg(i + 1) + lg(lg(min{epsilon, 1/2})))
     }
     return 0;
 }

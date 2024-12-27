@@ -24,7 +24,7 @@ SOFTWARE.
 */
 #include "selected.hpp"
 
-signed main(){
+int main(){
 	init();
 	while(true){
 		cls();

@@ -216,7 +216,7 @@ struct game{
 	}
 
 	void upd_rnd(){
-		int num = 0, bs = 71, mod = 1000000021;
+		int num = addr, bs = addr1 + 71, mod = 1000000021;
 		for(int i = 0; i < maxn; ++i)
 			for(int j = 0; j < M; ++j)
 				num = ((num * bs) % mod + a[i][j]) % mod;

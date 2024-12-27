@@ -1,0 +1,154 @@
+\documentclass[oneside]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{hyperref}
+\usepackage{mathtools}
+\usepackage{listings}
+\usepackage{xcolor}  
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{cleveref}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\textbf{Proof of evac's complexity}}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=black,
+    filecolor=magenta,
+    urlcolor=cyan,
+    citecolor=green
+}
+
+\titleformat{\chapter}[hang]{\Huge\bfseries}{}{0pt}{}
+\titleformat{\section}[hang]{\Large\bfseries}{}{0pt}{\thesection \space}
+
+\renewcommand{\thesection}{\arabic{section}}
+
+\lstset{
+    language=C++,
+    backgroundcolor=\color{black!5},
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue}\bfseries,
+    commentstyle=\color{green},
+    stringstyle=\color{red},
+    numbers=left,
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=10pt,
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=4,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    title=\lstname
+}
+
+\newcommand{\myparagraph}[1]{\paragraph{\textnormal{#1}}}
+
+\begin{document}
+
+\small
+
+\section*{Claims}
+
+\myparagraph{
+I claim evac's value complexity $evac(i, \epsilon)$ is $O(n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}}))$ and there is an algorithm which can compute $evac(i, \epsilon)$ in $O(lg(n)+lg(i+1)+lg(lg(\frac{1}{min\{\epsilon, \frac{1}{2}\}})))$. To prove it, one of the ways is finding an upper bound like $K$. I also claim that $K$ could be $16n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})$, and I showed that it's true in section $1$. Then, using the upper bound achieved, I proved the correctness of the first two claims ($lg(x) = log_2(x)$).
+}
+
+\section{Finding an upper bound}
+
+\myparagraph{
+In this section, I showed by a recursive way that there is a constant $c_1$ that in any case $evac(i, \epsilon) < c_1 n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})$ due to the definition of $evac(i, \epsilon)$. For any $c_2 \ge c_1$ if $k := c_2 n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})$ then $e(i) \le \epsilon$. And it's obvious that for $\epsilon_1 < \epsilon \rightarrow evac(i, \epsilon) \le evac(i, \epsilon_1)$. So it's OK to set $\epsilon$ equal to $min\{\epsilon, \frac{1}{2}\}$, and I split the problem into two general cases. At first, I solve the problem for $K \in R_+ \cup \{0\}$, then I solved it for non-negative integer values of $K$.
+}
+
+\myparagraph{
+Using the gamma function, which is a generalization of the factorial, the factorial product of a non-negative real number can be calculated.
+}
+
+\myparagraph{
+\textbf{Note:} Since it's a recursive solution, all the states we go to are reversible, but not necessarily walkable. That is, they may not be arguable from our previous state in the solution, but if we go from the end to the beginning, all the arguments will be correct.
+}
+
+\subsection{Lemmas and definitions}
+
+\myparagraph{
+Here are some definitions and four lemmas that will help to make the proof easier:
+}
+
+$$\epsilon:=min\{\epsilon, \frac{1}{2}\}, \; K:=c_1n(i+1)lg(\frac{n(i+1)}{\epsilon}),\; k:=c_2n(i+1)lg(\frac{n(i+1)}{\epsilon})$$
+
+\myparagraph{
+In every step, I showed why it's possible to apply that step using these four lemmas by writing four symbols: L1, L2, L3, and L4, and the argument.\newline \, \newline $1$. $(x \le y \land y \le z) \rightarrow x \le z$\newline $2$. $\forall x > 0: \; lg(x) < x$\newline $3$. $\forall x > 1: \; \frac{1}{2x} < lg(x)-lg(x-1)$\newline $4$. $\forall x \ge 15: \; 0 < \frac{x}{2} - lg(x) - 2$
+}
+
+\myparagraph{
+Given that the proof of these four lemmas is relatively simple and the last three can be proven using derivatives, I did not prove them.
+}
+
+\subsection{Case $i = 0$:}
+
+$$\frac{(n-1)^k}{n^{k-1}} \le \epsilon\leftrightarrow  k lg(n-1) - (k-1) lg(n) \le lg(\epsilon) \leftrightarrow $$
+$$0 \le lg(\epsilon) + (k-1) lg(n) - k lg(n-1) \leftrightarrow 0 \le lg(\frac{\epsilon}{n}) + k(lg(n) - lg(n - 1))$$
+\begin{tcolorbox}
+Using L1 and L3 it's OK to make right side smaller like this:\newline
+$$\frac{k}{2n} = \frac{c_2}{2}lg(\frac{n}{\epsilon}) \le k(lg(n) - lg(n-1))$$
+\end{tcolorbox}
+$$\xleftarrow[L1, L3]{\textnormal{explained above}} 0 \le lg(\frac{\epsilon}{n}) + \frac{c_2}{2}lg(\frac{n}{\epsilon}) \leftrightarrow 0 \le (\frac{c_2}{2} - 1)lg(\frac{n}{\epsilon})$$
+$$\xleftarrow[L1]{1 \le lg(\frac{n}{\epsilon})} 0 \le \frac{c_2}{2} - 1 \leftarrow 15 \le c_2 \leftrightarrow \mathbf{c_1 := 15}$$
+
+\subsection{Case $0 < i$:}
+
+$$C(k, i) \frac{(n-1)^{k-i}}{n^{k-1}} \le \epsilon \leftrightarrow lg(C(k, i)) + (k-i) lg(n-1) - (k-1) lg(n) \le lg(\epsilon)$$
+\begin{tcolorbox}
+Using L1 it's OK to make the left side bigger like this:\newline 
+$$C(k, i) \le k^i \leftrightarrow lg(C(k, i)) \le i lg(k)$$
+\end{tcolorbox}
+$$\xleftarrow[L1]{\textnormal{explained above}} ilg(k)+(k-i)lg(n-1)-(k-1)lg(n) \le lg(\epsilon)$$
+$$\leftrightarrow ilg(k) \le lg(\epsilon) + i lg(n-1) - lg(n) + k(lg(n) - lg(n-1))$$
+\begin{tcolorbox}
+Using L1 and L3 it's OK to make right side smaller like this:\newline
+$$\frac{k}{2n} = \frac{c_2}{2}(i+1)lg(\frac{n(i+1)}{\epsilon}) \le k(lg(n) - lg(n-1))$$
+\end{tcolorbox}
+$$\xleftarrow[L1, L3]{\textnormal{explained above}} ilg(k) \le lg(\frac{\epsilon}{n})+\frac{c_2}{2}(i+1)lg(\frac{n(i+1)}{\epsilon})+ilg(n-1)$$
+$$\leftrightarrow ilg(k) \le (\frac{c_2}{2}(i+1)-1)lg(\frac{n}{\epsilon})+\frac{c_2}{2}(i+1)lg(i+1)+ilg(n-1)$$
+\begin{tcolorbox}
+Using L1 and L2 it's OK to make left side bigger like this:\newline 
+$$c_2n(i+1)lg(\frac{n(i+1)}{\epsilon}) \le c_2n(i+1)\frac{n(i+ 1)}{\epsilon} \le c_2\frac{n^2(i+1)^2}{\epsilon^2}$$
+\end{tcolorbox}
+$$\xleftarrow[L1, L2]{\textnormal{explained above}} 2ilg(\frac{n(i+1)}{\epsilon})+ilg(c_2) \le (\frac{c_2}{2}(i+1)-1)lg(\frac{n(i+1)}{\epsilon})+lg(i+1)+ilg(n-1)$$
+$$\leftrightarrow ilg(c_2) \le (\frac{c_2}{2}(i+1)-2i-1)lg(\frac{n(i+1)}{\epsilon})+lg(i+1)+ilg(n-1)$$
+$$\leftrightarrow ilg(c_2) \le (\frac{c_2}{2}i+\frac{c_2}{2}-2i-1)lg(\frac{n(i+1)}{\epsilon}) + lg(i+1) + ilg(n-1)$$
+$$\leftrightarrow ilg(c_2) \le i(\frac{c_2}{2} - 2)lg(\frac{n(i+1)}{\epsilon}) + (\frac{c_2}{2} - 1)lg(\frac{n(i+1)}{\epsilon}) + lg(i+1) + ilg(n-1)$$
+$$\xleftarrow[L1]{0 \le lg(i + 1) + i lg(n - 1) + (\frac{c_2}{2} - 1)lg(\frac{n(i+1)}{\epsilon})} ilg(c_2) \le i(\frac{c_2}{2}-2)lg(\frac{n(i+1)}{\epsilon})$$
+$$\xleftarrow[L1]{1 \le lg(\frac{n(i+1)}{\epsilon}) \land 0 < i} lg(c_2) \le (\frac{c_2}{2} - 2) \leftrightarrow 0 \le \frac{c_2}{2} - lg(c_2) - 2 $$
+$$\xleftarrow{L4} c_1 = 15 \le c_2 \leftarrow \mathbf{c_1 := 15}$$
+
+\subsection{Upper bound for non-negative integer values of $K$}
+
+$$evac(i, \epsilon) \le ceil(K) < K + 1 \textnormal{ so if } c_1 := 16 $$
+$$ \xrightarrow{\frac{K}{c_1} > 1} evac(i, \epsilon) < K$$
+
+\section{Proof of evac's value complexity:}
+
+$$evac(i, \epsilon) < K$$
+$$\rightarrow evac(i, \epsilon) \in O(n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}}))$$
+
+\section{Proof of calculator's time complexity:}
+
+\myparagraph{
+Since if $c_1 := 16$ then $evac(i, \epsilon) < K$ (it has an upper bound), the answer of $evac(i, \epsilon)$ is binary searchable. It could be done by two binary searches: one for finding the value of $k$ that maximizes $e(i)$ and second to find the $evac(i, \epsilon)$ in a bounded sequence with decreasing $e(i)$ for $k$ in sequence. And binary search complexity is from $O(lg(K))$ so:
+}
+
+$$O(lg(n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})))$$
+$$= O(lg(n)+lg(i+1)+lg(lg(n) + lg(i+1) + lg(\frac{1}{min\{\epsilon, \frac{1}{2}\}})))$$
+$$= O(lg(n)+lg(i+1)+lg(lg(\frac{1}{min\{\epsilon, \frac{1}{2}\}})))$$
+
+\end{document}

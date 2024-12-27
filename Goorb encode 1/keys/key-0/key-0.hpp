@@ -30,17 +30,17 @@ void game::set_factors(){
 }
 
 void game::fill_factors(){
-	maxn = 31;
-	N = 5;
-	M = 17;
-	same = 2;
-	addr1 = 1023;
-	addr = 511;
-	bl = 10;
-	blsc = 14;
-	tb = time(nullptr) + tries;
-	serial_number = 21;
-	rang = 5;
+	maxn = 16 + rand() % 16;
+	N = 5 + rand() % 4;
+	M = 13 + rand() % 4;
+	same = 63 + rand() % 64;
+	addr1 = 512 + rand() % 511;
+	addr = 256 + rand() % 256;
+	bl = 7 + rand() % 4;
+	blsc = 11 + rand() % 4;
+	tb = rand() + ((long long)rand() << 15) + ((long long)rand() << 30) + ((long long)rand() << 45);
+	serial_number = rand() + ((long long)rand() << 15) + ((long long)rand() << 30) + ((long long)rand() << 45);
+	rang = 4 + rand() % 4;
 	factors.f[0] = serial_number;
 	factors.f[1] = tb;
 	factors.f[2] = N;

@@ -40,23 +40,32 @@ public:
         return;
     }
 
-    void F(){
+    string F(string s = ""){
         reset();
         cipher_block obj;
-        if(decode)
-            fill_input(obj.s);
+        if(s.empty()){
+            if(decode)
+                fill_input(obj.s);
+            else
+                set_input(obj.s);
+        }
         else
-            set_input(obj.s);
+            obj.s = s;
         auto input = obj.s.c_str();
         uint8_t hash[HASH_SIZE] = {};
         update(reinterpret_cast<const uint8_t*>(input), strlen(input));
         finalize(hash);
-        int res = key(hash);
-        if(decode)
-            map_it(res);
-        else
-            enough = add_it(obj, res);
-        return;
+        if(s.empty()){
+            int res = key(hash);
+            if(decode)
+                map_it(res);
+            else
+                enough = add_it(obj, res);
+        }
+        string hashed = "";
+        for(int i = 0; i < HASH_SIZE; ++i)
+            hashed += (char)hash[i];
+        return hashed;
     }
 
     void update(const uint8_t* data, size_t length) {

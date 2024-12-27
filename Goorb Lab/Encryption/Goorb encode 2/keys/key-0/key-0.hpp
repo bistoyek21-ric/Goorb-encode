@@ -14,9 +14,7 @@ void init(){
 }
 
 void renew(){
-	#ifdef __unix__
-		system(("rm -fr ./bank/" + keysname + "/*").c_str());
-	#elifdef __mach__
+    #if defined(__unix__) || defined(__APPLE__)
 		system(("rm -fr ./bank/" + keysname + "/*").c_str());
 	#else
 		system(("del /s /q .\\bank\\" + keysname + "\\* > nul").c_str());
