@@ -56,8 +56,8 @@ double fact(int64_t n){
 
 int main(){
     cout << "Goorb encode Project\n";
-    cout << "Author: Kasra Fouladi\n";
-    cout << "Company: bistoyek(21)\n";
+    cout << "evac Calculator\n";
+    cout << "Created by: 21\n";
     cout << "Calculator of evac(i, epsilon) in I ~ GOORB(n, k)\n";
     while(true){
         int64_t n, i;

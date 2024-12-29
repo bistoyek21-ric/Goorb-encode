@@ -92,7 +92,7 @@ void handleSignal(int signal){
 #endif
 
 int main(){
-    	#if defined(__unix__) || defined(__APPLE__)
+    #if defined(__unix__) || defined(__APPLE__)
 	signal(SIGINT, handleSignal);
 	signal(SIGTERM, handleSignal);
 	#endif
