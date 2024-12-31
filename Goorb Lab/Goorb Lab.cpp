@@ -29,18 +29,15 @@ SOFTWARE.
 
 using namespace std;
 
-void runExecutableWithFiles(const std::string &executable, const std::string &inputFile, const std::string &outputFile) {
+void runExecutableWithFiles(string executable, string input_file, string output_file){
     std::string command;
-#if defined(__unix__) || defined(__APPLE__)
- command = executable + " < " + inputFile + " > " + outputFile + " &";
- #else
- #endifcommand = "start /B " + executable + " < " + inputFile + " > " + outputFile; #endif
-int returnCode = system(command.c_str());
-if (returnCode != 0) {
-std::cerr << "Error: Command failed with return code " << returnCode << std::endl; }
-else {
-std::cout << "Command executed successfully." << std::endl;
-}
+    #if defined(__unix__) || defined(__APPLE__)
+    command = executable + " < " + inputFile + " > " + outputFile + " &";
+    #else
+    command = "start /B " + executable + " < " + inputFile + " > " + outputFile;
+    #endif
+    system(command.c_str());
+    return;
 }
 
 int main(){
@@ -54,20 +51,18 @@ int main(){
 	string attacker = "";
 	getline(cin, attacker);
 	if(attacker.empty())
-        attacker = "";
+        attacker = "./Attacks/main";
     cout << "\n-----------------------------------------------------------\n";
     cout << "Second step: enter the defender's directory\n";
-    /*
-    #if defined(__unix__) || defined(__APPLE__)
-    system();
-    system();
-    #else
-    system();
-    system();
-    #endif
-    */
-    std::ofstream(askFile).close();
-    std::ofstream(answerFile).close();
-
+    cout << "~ ";
+    string defender;
+	getline(cin, defender);
+    const string ask_file = "./Intractive/ask.txt", answer_file = "./Intractive/answer.txt";
+    ofstream ask(ask_file);
+    ofstream ans(answer_file);
+    //ask << "" << '\n';
+    //ans << "" << '\n';
+    ask.close();
+    ans.close();
 	return 0;
 }
