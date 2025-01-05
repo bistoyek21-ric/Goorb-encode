@@ -108,6 +108,7 @@ This encryption method offers significant flexibility, meaning you can use any o
 \myparagraph{
 To better understand the \textbf{Goorbian encryption} mechanism, it is first necessary to know about this method's two main parts: the $F$ function and the cipher-text bank.
 }
+\footnote{Goorb is a word originated from gorbeh, which means cat in persian.}
 
 \subsection{Function}
 
@@ -150,6 +151,7 @@ Decoding the encoded objects is straightforward by calculating $F(a)$, where $a$
 \myparagraph{
 As mentioned earlier, due to the complexity of $F$, it is highly improbable to find an element from $A$ whose $F$ result equals a particular element from $B$ on the first attempt. Given that for any element $b$ in $B$, there are infinitely many elements $a$ in $A$ such that $F(a) = b$, the probability of $F(a)$ equaling any specific element in $B$ is uniformly distributed. Therefore, by testing a large number of elements from $B$, we can construct a cipher-text bank where for each element in $B$, there is at least one corresponding element in $A$ such that $F(a) = b$. According to the \textbf{Goorbian Probability Distribution}, if $n$ elements are randomly tested from $A$, it is likely that the bank will be complete ($n$ is the answer to the following equation).
 }
+\footnote{Goorbian Probability Distribution is explained in section 3.}
 
 $$\frac{(|B| - 1) ^ n}{|B| ^ {n - 1}} = 0.1$$
 
@@ -440,6 +442,10 @@ Now suppose the number of players is $|B|$, and when a random and necessarily ne
 
 \myparagraph{
 \textbf{Note:} In this entire process, it is assumed that each time a different random value is produced from the generated values, given the huge size of the set of possible cipher-blocks and the \textbf{Birthday problem} that shows it's needed to use the random generator $O(\sqrt{N})$ times to have a good chance of collision. With a chance approximately equal to one, a collision never happens. ($N$ is the number of possible cipher-blocks that the $random\_block$ function can make.)
+}
+\footnote{
+For more information about the Birthday problem:\newline
+\href{https://www.oxfordreference.com/display/10.1093/oi/authority.20110803095508254}{https://www.oxfordreference.com/display/10.1093/oi/authority.20110803095508254}
 }
 
 \myparagraph{
