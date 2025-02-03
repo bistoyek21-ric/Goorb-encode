@@ -280,7 +280,7 @@ Since $F$ could be any function with the required conditions, it is nearly impos
 \subsubsection{Can this method be used in digital signatures?}
 
 \myparagraph{
-It can't be used in digital signatures, but it is possible to achieve a very secure encrypted communication protocol using these two keys. If two people have the same $F$, it can be used like symmetric encryption too.
+It can't be used in digital signatures, but it is possible to achieve a very secure encrypted communication protocol using these two keys. It can also be used to generate product authenticity codes. For more info checkout \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Key\%20Analysis}{\textbf{Key Analysis}}.
 }
 
 \subsection{Raz}
@@ -552,7 +552,7 @@ $$F(a) = \textnormal{key}(x) = \sum_{i=0}^{l-1} g_i(x\, mod \, 2^{256}) \cdot 2 
 $$ \text{where} \; (F - \text{key})(a) = x \; \textnormal{and} \; x \in S$$
 
 \myparagraph{
-\textbf{Note:} To obtain a desirable result, for any two $g_i(x)$ and $g_j(x)$ $(0 \le i  < j < l)$, the probability that the output is $1$ for a random $x$ should be independent events, and for each function in this functional series, the probability that the output equals $1$ should be $\frac{1}{2}$, both with a negligible error range (For more explanation, check out the \textbf{Goorbian Probability Distribution/Key Analysis} directory in the project's repository.). For small values of $|B| = 2^l$, the creation of such series is not so challenging, e.g., for $l \le 8$, one of the ways is to set $g_i(x)$ equal to XOR of all bits of SHA-256$^{(i+1)}(x) \And x$.
+\textbf{Note:} To obtain a desirable result, for any two $g_i(x)$ and $g_j(x)$ $(0 \le i  < j < l)$, the probability that the output is $1$ for a random $x$ should be independent events, and for each function in this functional series, the probability that the output equals $1$ should be $\frac{1}{2}$, both with a negligible error range (For more explanation, check out the \textbf{Key Analysis} directory in the project's repository.). For small values of $|B| = 2^l$, the creation of such series is not so challenging, e.g., for $l \le 8$, one of the ways is to set $g_i(x)$ equal to XOR of all bits of SHA-256$^{(i+1)}(x) \And x$.
 }
 
 \myparagraph{
@@ -671,8 +671,7 @@ Link of the \textbf{Goorb encode} project's repository:\\
 }
 
 \myparagraph{
-[12] \href{https://www.geeksforgeeks.org/advanced-encryption-standard-aes/}{https://www.geeksforgeeks.org/advanced-encryption-standard-aes/}
-}
+[12] \href{https://www.geeksforgeeks.org/advanced-encryption-standard-aes/}{https://www.geeksforgeeks.org/advanced-encryption-standard-aes/}}
 
 \myparagraph{
 [13] \href{https://www.nist.gov/cybersecurity/what-post-quantum-cryptography}{https://www.nist.gov/cybersecurity/what-post-quantum-cryptography}
