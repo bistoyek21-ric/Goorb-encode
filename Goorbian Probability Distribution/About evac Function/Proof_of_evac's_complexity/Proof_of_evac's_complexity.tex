@@ -60,13 +60,13 @@
 \section*{Claims}
 
 \myparagraph{
-I claim evac's value complexity $evac(i, \epsilon)$ is $O(n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}}))$ and there is an algorithm which can compute $evac(i, \epsilon)$ in $O(lg(n)+lg(i+1)+lg(lg(\frac{1}{min\{\epsilon, \frac{1}{2}\}})))$. To prove it, one of the ways is finding an upper bound like $K$. I also claim that $K$ could be $16n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})$, and I showed that it's true in section $1$. Then, using the upper bound achieved, I proved the correctness of the first two claims ($lg(x) = log_2(x)$).
+I claim that the complexity of evac's value $evac(i, \epsilon)$ is $O(n(i+1)\log(\frac{n(i+1)}{\min\{\epsilon, \frac{1}{2}\}}))$ and that there is an algorithm which can compute $evac(i, \epsilon)$ in $O(\log(n)+\log(i+1)+\log(\log(\frac{1}{\min\{\epsilon, \frac{1}{2}\}})))$. To prove this, one of the ways is finding an upper bound like $K$. I also claim that $K$ could be $16n(i+1)\log(\frac{n(i+1)}{\min\{\epsilon, \frac{1}{2}\}})$, and I showed that this is true in Section 1. Then, using the upper bound achieved, I proved the correctness of the first two claims ($\log(x) = \log_2(x)$).
 }
 
 \section{Finding an upper bound}
 
 \myparagraph{
-In this section, I showed by a recursive way that there is a constant $c_1$ that in any case $evac(i, \epsilon) < c_1 n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})$ due to the definition of $evac(i, \epsilon)$. For any $c_2 \ge c_1$ if $k := c_2 n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})$ then $e(i) \le \epsilon$. And it's obvious that for $\epsilon_1 < \epsilon \rightarrow evac(i, \epsilon) \le evac(i, \epsilon_1)$. So it's OK to set $\epsilon$ equal to $min\{\epsilon, \frac{1}{2}\}$, and I split the problem into two general cases. At first, I solve the problem for $K \in R_+ \cup \{0\}$, then I solved it for non-negative integer values of $K$.
+In this section, I showed in a recursive way that there is a constant $c_1$ such that in any case $evac(i, \epsilon) < c_1 n(i+1)\log(\frac{n(i+1)}{\min\{\epsilon, \frac{1}{2}\}})$ due to the definition of $evac(i, \epsilon)$. For any $c_2 \ge c_1$, if $k := c_2 n(i+1)\log(\frac{n(i+1)}{\min\{\epsilon, \frac{1}{2}\}})$ then $e(i) \le \epsilon$. And it's obvious that for $\epsilon_1 < \epsilon \rightarrow evac(i, \epsilon) \le evac(i, \epsilon_1)$. So it's OK to set $\epsilon$ equal to $\min\{\epsilon, \frac{1}{2}\}$, and I split the problem into two general cases. First, I solve the problem for $K \in \mathbb{R}_+ \cup \{0\}$, then I solve it for non-negative integer values of $K$.
 }
 
 \myparagraph{
@@ -83,7 +83,7 @@ Using the gamma function, which is a generalization of the factorial, the factor
 Here are some definitions and four lemmas that will help to make the proof easier:
 }
 
-$$\epsilon:=min\{\epsilon, \frac{1}{2}\}, \; K:=c_1n(i+1)lg(\frac{n(i+1)}{\epsilon}),\; k:=c_2n(i+1)lg(\frac{n(i+1)}{\epsilon})$$
+$$\epsilon := \min\{\epsilon, \frac{1}{2}\}, \; K := c_1n(i+1)\log(\frac{n(i+1)}{\epsilon}),\; k := c_2n(i+1)\log(\frac{n(i+1)}{\epsilon})$$
 
 \myparagraph{
 In every step, I showed why it's possible to apply that step using these four lemmas by writing four symbols: L1, L2, L3, and L4, and the argument.
@@ -91,9 +91,9 @@ In every step, I showed why it's possible to apply that step using these four le
 
 \begin{enumerate}
     \item{$(x \le y \land y \le z) \rightarrow x \le z$}
-    \item{$\forall x > 0: \; lg(x) < x$}
-    \item{$\forall x > 1: \; \frac{1}{2x} < lg(x)-lg(x-1)$}
-    \item{$\forall x \ge 15: \; 0 < \frac{x}{2} - lg(x) - 2$}
+    \item{$\forall x > 0: \; \log(x) < x$}
+    \item{$\forall x > 1: \; \frac{1}{2x} < \log(x) - \log(x-1)$}
+    \item{$\forall x \ge 15: \; 0 < \frac{x}{2} - \log(x) - 2$}
 \end{enumerate}
 
 \myparagraph{
@@ -151,7 +151,7 @@ $$\rightarrow evac(i, \epsilon) \in O(n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \fra
 \section{Proof of calculator's time complexity:}
 
 \myparagraph{
-Since if $c_1 := 16$ then $evac(i, \epsilon) < K$ (it has an upper bound), the answer of $evac(i, \epsilon)$ is binary searchable. It could be done by two binary searches: one for finding the value of $k$ that maximizes $e(i)$ and second to find the $evac(i, \epsilon)$ in a bounded sequence with decreasing $e(i)$ for $k$ in sequence. And binary search complexity is from $O(lg(K))$ so:
+Given that $c_1 := 16$, then $evac(i, \epsilon) < K$ (it has an upper bound), the value of $evac(i, \epsilon)$ is binary searchable. This can be achieved by performing two binary searches: one to find the value of $k$ that maximizes $e(i)$ and the second to find the $evac(i, \epsilon)$ in a bounded sequence with decreasing $e(i)$ for $k$ in sequence. The complexity of binary search is $O(\log(K))$, thus:
 }
 
 $$O(lg(n(i+1)lg(\frac{n(i+1)}{min\{\epsilon, \frac{1}{2}\}})))$$

@@ -585,7 +585,7 @@ $$F(a) = \textnormal{key}(x) = \sum_{i=0}^{l-1} g_i(x\, mod \, 2^{256}) \cdot 2 
 $$ \text{where} \; (F - \text{key})(a) = x \; \textnormal{and} \; x \in S$$
 
 \myparagraph{
-\textbf{Note:} To obtain a desirable result, for any two $g_i(x)$ and $g_j(x)$ $(0 \le i  < j < l)$, the probability that the output is $1$ for a random $x$ should be independent events, and for each function in this functional series, the probability that the output equals $1$ should be $\frac{1}{2}$, both with a negligible error range (For more explanation, check out the \textbf{Key\_analysis} directory in the project's repository.). For small values of $|B| = 2^l$, the creation of such series is not so challenging, e.g., for $l \le 8$, one of the ways is to set $g_i(x)$ equal to XOR of all bits of SHA-256$^{(i+1)}(x) \And x$.
+\textbf{Note:} To obtain a desirable result, for any two $g_i(x)$ and $g_j(x)$ $(0 \le i  < j < l)$, the probability that the output is $1$ for a random $x$ should be independent events, and for each function in this functional series, the probability that the output equals $1$ should be $\frac{1}{2}$, both with a negligible error range (For more explanation, check out the \textbf{"Goorbian Probability Distribution/Key\_security"} directory in the project's repository.). For small values of $|B| = 2^l$, the creation of such series is not so challenging, e.g., for $l \le 8$, one of the ways is to set $g_i(x)$ equal to XOR of all bits of SHA-256$^{(i+1)}(x) \And x$ ($\And$ is bitwise AND operator).
 }
 
 \myparagraph{
@@ -708,6 +708,10 @@ Link of the \textbf{Goorb encode} project's repository:\\
 
 \myparagraph{
 [13] \href{https://www.nist.gov/cybersecurity/what-post-quantum-cryptography}{https://www.nist.gov/cybersecurity/what-post-quantum-cryptography}
+}
+
+\myparagraph{
+[14] \href{https://ocw.mit.edu/courses/9-07-statistics-for-brain-and-cognitive-science-fall-2016/42505b2c837e6182a408650e242d9830_MIT9_07F16_lec7.pdf}{https://ocw.mit.edu/courses/9-07-statistics-for-brain-and-cognitive-science \newline -fall-2016/42505b2c837e6182a408650e242d9830\_MIT9\_07F16\_lec7.pdf}
 }
 
 \end{document}
