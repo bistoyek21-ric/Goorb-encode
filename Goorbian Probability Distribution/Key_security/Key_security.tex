@@ -103,11 +103,16 @@ $$E[max\{X_1, ..., X_n\}] = M \approx  \frac{k}{n} + \sqrt{\frac{2k \ln(n)}{n}}$
 $$E[max\{X'_1, ..., X'_n\}] = M'$$
 
 \myparagraph{
-It's possible to prove that for big enough $k$s, always $M << M'$. Assume the greatest chance to be selected in a round is $\frac{q}{n}, (1 < q)$, so the expected value of being selected is $\frac{kq}{n} \le M'$. And again, like the former test, a parameter is defined to measure how safe the key is:
+Then I prove $M \le M'$; assume a quantity $W=\sum n^{X'_i}$, where $M'$ becomes greater when $E[W]$ increases and smaller when $E[W]$ decreases. Considering the simplification of the following equation, the minimum value of $E[W]$ is achieved when the distribution is uniform. Therefore, $min\{M'\}=M$, or $M \le M'$.
 }
 
-$$\frac{k}{n} + \sqrt{\frac{2k \ln(n)}{n}} \le \frac{kq}{n} \le M' \leftrightarrow \sqrt{\frac{2k \ln(n)}{n}} \le \frac{k(q-1)}{n}$$
-$$\leftrightarrow \sqrt{2 n \ln(n)} \le \sqrt{k} (q-1) \leftrightarrow \frac{2n \ln(n)}{(q-1)^2} \le k$$
+$$E[W] = \sum_{i=1}^n \sum_{j=0}^k n^j {p_i}^j (1-p_i)^{k-j} \binom{k}{j} = \sum_{i=1}^n \left( (1-p_i)^k \sum_{j=0}^k \left( \frac{np_i}{1-p_i} \right)^j \binom{k}{j} \right)$$
+
+$$= \sum_{i=1}^n (1-p_i)^k \left( \frac{np_i}{1-p_i} + 1 \right)^k = \sum_{i=1}^n ((n-1)p_i + 1)^k$$
+
+\myparagraph{
+ And again, same as the previous test, a parameter is defined to measure how safe the key is:
+}
 
 $$\textnormal{safety\_rate} \in (0, 1], \; \textnormal{safety\_rate} = 1 - \frac{M' - M}{k}$$
 
