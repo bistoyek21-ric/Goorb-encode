@@ -82,9 +82,8 @@ This article was written entirely by me without any external assistance. I am gr
 \subsection{Importance}
 
 \myparagraph{
-In today’s world, we face an increase in data exchange on digital platforms and the rapid advancement of attack methods, supercomputers, and quantum attacks. There is a significant risk that a particular cipher-text could be broken, causing massive damages in the future. The need for strong and efficient encryption and hash algorithms is more critical than ever.
+In today’s world, we face an increase in data exchange on digital platforms and the rapid advancement of attack methods, supercomputers, and quantum attacks. There is a significant risk that a particular cipher-text could be broken, causing massive damage in the future. The need for strong and efficient encryption and hash algorithms is more critical than ever.
 }
-\footnote{cipher-text: An encoded text}
 
 \myparagraph{
 This urgency drives cryptography specialists to make considerable efforts to create more secure encryption and hash algorithms. These advancements aim to ensure that even if hackers gain unauthorized access to information, they cannot easily retrieve the original data. In this article, I introduce a new encryption method that uses mathematical and algorithmic techniques to resist various attacks, especially quantum attacks, thereby keeping information secure for future decades.
@@ -93,12 +92,12 @@ This urgency drives cryptography specialists to make considerable efforts to cre
 \subsection{Abstract}
 
 \myparagraph{
-As previously mentioned, one of the primary goals of creating this encryption method is to ensure security against numerous attacks. Therefore, I have invented a new encryption style called \textbf{Goorbian encryption}, which utilizes one-way functions, an algorithm as a private key, and a cipher-text bank as a public key. This approach offers significant advantages in terms of security, and by employing this style, any encryption algorithm will be resistant to many attacks. In the remainder of the article, I will address each of these topics in detail.
+As previously mentioned, one of the primary goals of creating this encryption method is to ensure security against numerous attacks. Therefore, I have invented a new encryption style called \textbf{Goorbian encryption}, which utilizes one-way functions, an algorithm as a private key, and a cipher-text bank as a public key. This approach offers significant advantages in terms of security, and by employing this style, any encryption algorithm will be resistant to many attacks (two versions of it were tested with \textbf{Goorb Lab}, a simple cryptography lab which introduced in the article). In the remainder of the article, I will address each of these topics in detail.
 }
 \footnote{For more information about public and private keys:\\ \href{https://ssldragon.com/blog/public-key-cryptography}{https://ssldragon.com/blog/public-key-cryptography}}
 
 \myparagraph{
-This encryption method offers significant flexibility, meaning you can use any one-way function depending on your specific application. In this research, I introduced a messaging protocol using this method named \textbf{Raz} and \textbf{Goorb post} a messenger using this protocol, two versions of this style, \textbf{Goorb encode 2} using the SHA-256 algorithm and \textbf{Goorb encode 1} using an algorithm similar to Bubble Shooter in its structure of one-way function of my encryption.
+This encryption method offers significant flexibility, meaning you can use any one-way function depending on your specific application. In this research, I introduced an authentication protocol named \textbf{Rast}, a messaging protocol using this method named \textbf{Raz} and \textbf{Goorb post} a messenger using Raz protocol, two versions of this style, \textbf{Goorb encode 2} using the SHA-256 algorithm and \textbf{Goorb encode 1}, which uses an algorithm similar to Bubble Shooter in the structure of the one-way function of my encryption.
 }
 \footnote{For more information about SHA-256:\\ \href{https://networkencyclopedia.com/sha-256-unmasked-deciphering-cryptographic-hash-functions}{https://networkencyclopedia.com/sha-256-unmasked-deciphering-cryptographic-hash-functions}}
 \footnote{For more information about Bubble Shooter game:\\ \href{https://games.skillz.com/guides/bubble-shooter}{https://games.skillz.com/guides/bubble-shooter}}
@@ -280,8 +279,37 @@ Since $F$ could be any function with the required conditions, it is nearly impos
 \subsubsection{Can this method be used in digital signatures?}
 
 \myparagraph{
-It can't be used in digital signatures, but it is possible to achieve a very secure encrypted communication protocol using these two keys. It can also be used to generate product authenticity codes. For more info checkout \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Key\%20Analysis}{\textbf{Key Analysis}}.
+It can't be used in digital signatures, but it is possible to achieve a very secure encrypted communication protocol using these two keys, and it can also be used to generate product authenticity codes, which explained later in the paper.
 }
+
+\subsection{Rast}
+
+\myparagraph{
+As I mentioned previously, this encryption type can be used to generate product authenticity codes, and I designed a mechanism for it named \textbf{Rast}. The main idea is for $b \in B$ there are infinite number of $a \in A$ which $F(a) = b$ and $A$ is distributed uniformly on $B$.
+}
+\footnote{Rast/raast/: A Persian word meaning truth.}
+
+\myparagraph{
+Assuming the elements in $A$ and $B$ can be represented as binary strings (without leading zeros) there is a way to create product authenticity codes using a secret $F$ function:
+}
+
+\begin{enumerate}
+    \item{Choose three numbers $n$, $m$, and $k$ which satisfy $|B| \le 2^{n - k - 64}$, $k \ge 64$, and $2^{256} \le |B|^m$.}
+    \item{Each product will contain $m$ cipher-blocks in its authenticity code (let's call it $code[i]$ for the $i^{th}$ product) and is enumerated by non-negative integers below $2^k$.}
+    \item{In the process of generating $code[i]$, only cipher-blocks of length $n$ whose $k$ rightmost digits are equal to $i$ can be chosen.}
+    \item{Design a secure authenticator server to check the code and respond with one of the labels: ORIGINAL, FAKE, or EXPIRED.}
+    \item{For the $i^{th}$ product, if it is original, it should satisfy the following equation: \newline $decrypt(code[i]) = s[i]$, where $s[i]$ is a particular string. If the equation is satisfied, the authenticator should label $code[i]$ as EXPIRED for future authentications.}
+\end{enumerate}
+
+\myparagraph{
+Due to the extremely large value of $|B|^m$ and the uniform distribution of $A$ on $B$, without knowing the exact criterion of $F$, it's impossible to forge a valid authentication code. If someone copies one authentication code onto some fake products, with the first successful authentication, the other products will lose their value. And if it's needed to authenticate more than once it's possible to assign the product number $i$ all $code[j]$ for $li \le j < l(i+1)$ which $l$ is a fixed positive integer and add EARLY label to authentication results and set the label of all $code[j]$ except $j = li$ equal to EARLY. When $code[j]$ for $li \le j < l(i+1)-1$ expires the next code's label will change from EARLY to ORIGINAL and $code[li]$'s is initially labeled as ORIGINAL.
+}
+
+\myparagraph{
+In the near future, I will conduct research to find a way to implement this mechanism with a quantum computer to boost its security. I suggest this topic for future research by those interested.
+}
+
+\newpage
 
 \subsection{Raz}
 
@@ -472,8 +500,13 @@ It can be shown that there are some possible cases of $F$ which crypt analysis a
 \subsection{No clue scenario}
 
 \myparagraph{
-Imagine there is no clue about cryptography but it is guaranteed that the key(s) of it won't change in all of the attack time (clearly now it's an easier problem), and there is an oracle that could answer these queries:\newline \newline$1$. For $a$ such $a \in A$ what is $F(a)$. (costs $x$)\newline$2$. For $b$ that $b \in B$ return a random $a \in A$ which $F(a) = b$. (costs $y$)
+Imagine there is no clue about cryptography but it is guaranteed that the key(s) of it won't change in all of the attack time (clearly now it's an easier problem), and there is an oracle that could answer these queries:
 }
+
+\begin{enumerate}
+    \item{For $a$ such $a \in A$ what is $F(a)$. (costs $x$)}
+    \item{For $b$ that $b \in B$ return a random $a \in A$ which $F(a) = b$. (costs $y$)}
+\end{enumerate}
 
 \myparagraph{
 Using these two queries, it is possible to perform any crypt-analysis and statistical-analysis attacks, and since we have no data about the $F$ function, a combined attack with one of the crypt-analysis attacks and ML attacks (ML attacks are in the statistical attacks category) could be a nice try. So, I designed some of these attacks and attacked these two versions to test their security with each key. The source codes of attacks are available in the project's repository in the \textbf{Goorb Lab} directory, and here are the results of the tests.
@@ -552,7 +585,7 @@ $$F(a) = \textnormal{key}(x) = \sum_{i=0}^{l-1} g_i(x\, mod \, 2^{256}) \cdot 2 
 $$ \text{where} \; (F - \text{key})(a) = x \; \textnormal{and} \; x \in S$$
 
 \myparagraph{
-\textbf{Note:} To obtain a desirable result, for any two $g_i(x)$ and $g_j(x)$ $(0 \le i  < j < l)$, the probability that the output is $1$ for a random $x$ should be independent events, and for each function in this functional series, the probability that the output equals $1$ should be $\frac{1}{2}$, both with a negligible error range (For more explanation, check out the \textbf{Key Analysis} directory in the project's repository.). For small values of $|B| = 2^l$, the creation of such series is not so challenging, e.g., for $l \le 8$, one of the ways is to set $g_i(x)$ equal to XOR of all bits of SHA-256$^{(i+1)}(x) \And x$.
+\textbf{Note:} To obtain a desirable result, for any two $g_i(x)$ and $g_j(x)$ $(0 \le i  < j < l)$, the probability that the output is $1$ for a random $x$ should be independent events, and for each function in this functional series, the probability that the output equals $1$ should be $\frac{1}{2}$, both with a negligible error range (For more explanation, check out the \textbf{Key\_analysis} directory in the project's repository.). For small values of $|B| = 2^l$, the creation of such series is not so challenging, e.g., for $l \le 8$, one of the ways is to set $g_i(x)$ equal to XOR of all bits of SHA-256$^{(i+1)}(x) \And x$.
 }
 
 \myparagraph{
@@ -570,7 +603,7 @@ In the \textbf{Goorb encode} project, I introduced and evaluated a novel encrypt
 }
 
 \myparagraph{
-The \textbf{pseudo-asymmetric} property of keys in \textbf{Goorbian encryption} allows us to achieve the \textbf{Raz} encryption protocol. This protocol significantly enhanced the security of communications. The developed messaging application, \textbf{Goorb post}, provided a secure and dynamic environment for data exchange where users could easily change their encryption keys and algorithms.
+\textbf{Rast} a product authentication mechanism designed using the existence of a infinite number of cipher-blocks corresponding to plaint-blocks in this type of encryption. And the \textbf{pseudo-asymmetric} property of keys in \textbf{Goorbian encryption} allows us to achieve the \textbf{Raz} encryption protocol. This protocol significantly enhanced the security of communications. The developed messaging application, \textbf{Goorb post}, provided a secure and dynamic environment for data exchange where users could easily change their encryption keys and algorithms.
 }
 
 \myparagraph{
@@ -584,21 +617,21 @@ The applications of \textbf{Goorbian encryption} highlight its high potential an
 \subsubsection*{Suggestions for Future Researches:}
 
 \begin{enumerate}
-\item \textbf{Development and Optimization of Algorithms:}
-\begin{itemize}
-\item Develop and improve the performance and efficiency of encryption algorithms based on Goorbian encryption.
-\item Create and optimize powerful and efficient $F$ functions and keys.
-\end{itemize}
-\item \textbf{Industrial and Commercial Applications:}
-\begin{itemize} 
-\item Assess practical applications of Goorbian encryption in various industries such as cybersecurity, cryptocurrencies, and telecommunications. 
-\item Study real-world use cases and implement this method in existing systems.
-\end{itemize}
-\item \textbf{Examination and Analysis of Emerging Threats:}
-\begin{itemize}
-\item Study and evaluate emerging threats and propose solutions to counter them.
-\item Analyze the impact and potential outcomes of new threats on the security of Goorbian encryption.
-\end{itemize}
+    \item \textbf{Development and Optimization of Algorithms:}
+    \begin{itemize}
+        \item Develop and improve the performance and efficiency of encryption algorithms based on Goorbian encryption.
+        \item Create and optimize powerful and efficient $F$ functions and keys.
+    \end{itemize}
+    \item \textbf{Industrial and Commercial Applications:}
+    \begin{itemize} 
+        \item Assess practical applications of Goorbian encryption in various industries such as cybersecurity, cryptocurrencies, and telecommunications. 
+        \item Study real-world use cases and implement this method in    existing systems.
+    \end{itemize}
+    \item \textbf{Examination and Analysis of Emerging Threats:}
+    \begin{itemize}
+        \item Study and evaluate emerging threats and propose solutions to counter them.
+        \item Analyze the impact and potential outcomes of new threats on the security of Goorbian encryption.
+    \end{itemize}
 \end{enumerate}
 
 \newpage
@@ -611,10 +644,10 @@ The following section provides links to the source codes related to the project.
 }
 
 \begin{itemize}
-\item \textbf{Goorb encode 1:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20enco \newline de\%201}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline encode\%201}
-\item \textbf{Goorb encode 2:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20encode\%202}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline encode\%202} 
-\item \textbf{Goorb post:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20post}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline post} 
-\item \textbf{Goorb Lab:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20Lab}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline Lab}
+    \item \textbf{Goorb encode 1:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20enco \newline de\%201}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline encode\%201}
+    \item \textbf{Goorb encode 2:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20encode\%202}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline encode\%202} 
+    \item \textbf{Goorb post:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20post}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline post} 
+    \item \textbf{Goorb Lab:} \\ \href{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20Lab}{https://github.com/bistoyek-official/Goorb-encode/tree/main/Goorb\%20 \newline Lab}
 \end{itemize}
 
 \myparagraph{
