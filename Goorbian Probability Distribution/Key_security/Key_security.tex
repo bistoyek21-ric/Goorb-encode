@@ -87,23 +87,19 @@ Now, it's known that $e(0) < e'(0)$, so a parameter named safety\_rate is define
 }
 
 $$nP^k \le nQ^k \rightarrow P^k \le Q^k$$
-$$\textnormal{safety\_rate} \in (0, 1], \; \textnormal{safety\_rate} = 1-Q^k+P^k$$
+$$\textnormal{safety\_rate} \in (0, 1], \; \textnormal{safety\_rate} = 1 - Q^k + P^k$$
 
 \section{Head Test}
 
 \myparagraph{
-In this test, the maximum number of times a player has been selected in the ideal case and for a particular key are compared together. By utilizing the \textbf{Law of Large Numbers}, it's possible to approximate this quantity for the ideal case, and using experimental methods it's possible to approximate it for that particular key.
-}
-\footnote{
-For more info about the \textbf{Law of Large Numbers}:\newline
-\href{https://ocw.mit.edu/courses/9-07-statistics-for-brain-and-cognitive-science-fall-2016/42505b2c837e6182a408650e242d9830_MIT9_07F16_lec7.pdf}{https://ocw.mit.edu/courses/9-07-statistics-for-brain-and-cognitive-science-fall-2016/42505b2c837e6182a408650e242d9830\_MIT9\_07F16\_lec7.pdf}
+In this test, a quantity $W$ is designed to measure What is the density of players in cells nearby $x=k$ in the ideal case and for a particular key and comparing them together. It's value for the ideal case is calculated below, and using experimental methods it's possible to approximate it for that particular key.
 }
 
-$$E[max\{X_1, ..., X_n\}] = M \approx  \frac{k}{n} + \sqrt{\frac{2k \ln(n)}{n}}$$
-$$E[max\{X'_1, ..., X'_n\}] = M'$$
+$$E[W] = M, \; W = \sum_{i=1}^n n^{X_i}$$
+$$X_i = \textnormal{number of times } i^{th} \textnormal{ player has been chosen}$$
 
 \myparagraph{
-Then I prove $M \le M'$; assume a quantity $W=\sum n^{X'_i}$, where $M'$ becomes greater when $E[W]$ increases and smaller when $E[W]$ decreases. Considering the simplification of the following equation, the minimum value of $E[W]$ is achieved when the distribution is uniform. Therefore, $min\{M'\}=M$, or $M \le M'$.
+Then I prove $M \le M'$ ($M'$ is the value of $E[W]$ for a particular key). Considering the simplification of the following equation, the minimum value of $E[W]$ is achieved when the distribution is uniform, and the maximum achieved when their variance is maximized. Therefore, $min\{M'\}=M$, or $M \le M'$.
 }
 
 $$E[W] = \sum_{i=1}^n \sum_{j=0}^k n^j {p_i}^j (1-p_i)^{k-j} \binom{k}{j} = \sum_{i=1}^n \left( (1-p_i)^k \sum_{j=0}^k \left( \frac{np_i}{1-p_i} \right)^j \binom{k}{j} \right)$$
@@ -114,6 +110,6 @@ $$= \sum_{i=1}^n (1-p_i)^k \left( \frac{np_i}{1-p_i} + 1 \right)^k = \sum_{i=1}^
  And again, same as the previous test, a parameter is defined to measure how safe the key is:
 }
 
-$$\textnormal{safety\_rate} \in (0, 1], \; \textnormal{safety\_rate} = 1 - \frac{M' - M}{k}$$
+$$\textnormal{safety\_rate} \in (0, 1], \; \textnormal{safety\_rate} = 1 - \frac{M' - M}{n^k}$$
 
 \end{document}
