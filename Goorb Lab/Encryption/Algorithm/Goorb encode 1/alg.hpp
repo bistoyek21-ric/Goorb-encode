@@ -279,8 +279,10 @@ struct game{
 			canon = rnd();
 			upd_res(5);
 		}
-        if(mvs + mvs1 < 200)
+        if(!decode && mvs + mvs1 < 200){
+            F();
             return;
+        }
 		quality += mvs + mvs1;
 		if(!decode)
 			enough = add_it(factors, res);

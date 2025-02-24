@@ -126,7 +126,7 @@ string game::translate(){
 	for(int i = 0; i < len; i += K){
         char c = 0;
         for(int j = i; j < i + K; ++j)
-            c = (c << 1) | mapped[i];
+            c = (c << 1) | mapped[j];
         res += c;
 	}
 	return res;

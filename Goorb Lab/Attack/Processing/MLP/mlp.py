@@ -23,50 +23,40 @@ SOFTWARE.
 
 """
 
-# Import necessary libraries
-import numpy as np
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.layers import Dense, LSTM, Conv1D, MaxPooling1D, Flatten, Reshape
 
-class MultiModelMLP:
-    def __init__(self, l, input_dim):
-        self.l = l
-        self.models = []
-        self.input_dim = input_dim
-        # Create l models
-        for _ in range(l):
-            model = Sequential()
-            model.add(Dense(64, input_shape=(input_dim,), activation='relu'))
-            model.add(Dense(64, activation='relu'))
-            model.add(Dense(1, activation='sigmoid'))
-            model.compile(loss='binary_crossentropy',
-                          optimizer=Adam(learning_rate=0.001),
-                          metrics=['accuracy'])
-            self.models.append(model)
+class BinaryClassifierMLP:
+    def __init__(self, input_size):
+        self.model = Sequential([
+            Dense(64, activation='relu', input_shape=(input_size,)),
+            Dense(32, activation='relu'),
+            Dense(1, activation='sigmoid')
+        ])
+        self._compile()
     
-    def train(self, X, y_list, epochs=10, batch_size=32):
-        for i in range(self.l):
-            self.models[i].fit(X, y_list[:, i], epochs=epochs, batch_size=batch_size)
+    def _compile(self):
+        self.model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    
+    def train(self, X_train, y_train, epochs=10, batch_size=32):
+        self.history = self.model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
     
     def predict(self, X):
-        predictions = np.zeros((X.shape[0], self.l))
-        for i in range(self.l):
-            predictions[:, i] = self.models[i].predict(X).flatten()
-        return predictions
+        return self.model.predict(X, verbose=0)
 
-if __name__ == '__main__':
-    # Number of models
-    l = 5
-    # Input dimension
-    input_dim = 20
-    # Create instance of the class
-    multi_model = MultiModelMLP(l, input_dim)
-    # Generate dummy data
-    X = np.random.rand(1000, input_dim)
-    y_list = np.random.randint(2, size=(1000, l))
-    # Train the models
-    multi_model.train(X, y_list, epochs=10, batch_size=32)
-    # Predict with the models
-    predictions = multi_model.predict(X)
-    print(predictions)
+
+class CombinedClassifier:
+    def __init__(self, input_size, num_classifiers):
+        self.classifiers = [BinaryClassifierMLP(input_size) for _ in range(num_classifiers)]
+    
+    def train(self, X_train, y_train, epochs=10, batch_size=32):
+        for i, clf in enumerate(self.classifiers):
+            clf.train(X_train, y_train[:, i], epochs=epochs, batch_size=batch_size)
+    
+    def predict(self, X):
+        predictions = []
+        for clf in self.classifiers:
+            pred = clf.predict(X)
+            predictions.append(pred.flatten())
+        return np.column_stack(predictions)

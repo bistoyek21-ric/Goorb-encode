@@ -1,0 +1,13 @@
+*.o
+*.out
+*.gch
+*.ghc
+*.exe
+
+*__pycache__
+
+/Goorb Lab/Encryption/Algorithm/Goorb encode 1/bank/key-1/*
+/Goorb Lab/Encryption/Algorithm/Goorb encode 2/bank/key-0/*
+
+! /Goorb Lab/Encryption/Algorithm/Goorb encode 1/bank/key-1/.gitkeep
+!/Goorb Lab/Encryption/Algorithm/Goorb encode 2/bank/key-0/.gitkeep

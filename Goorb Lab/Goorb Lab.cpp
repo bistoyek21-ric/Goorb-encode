@@ -46,7 +46,7 @@ int main(){
 	cout << "___________________________________________\n\n";
 	cout << "\n-----------\n";
 	cout << "First step: enter the attacker's directory\n";
-	cout << "(If you want to use Goorb Lab's default attacks just press the enter key)\n";
+	cout << "(If you want to use Goorb Lab's default security test just press the enter key)\n";
 	cout << "~  ";
 	string attacker = "";
 	getline(cin, attacker);

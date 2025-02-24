@@ -44,6 +44,7 @@ int main(){
 		getline(cin, s);
 		if(s == "1"){
 			time_t t = time(nullptr);
+			srand(t);
 			_decode_();
 			cout << "task 1:\ndone!\npress any key to continue\n";
 			cout << "in: " << time(nullptr) - t << " seconds\n";
@@ -51,6 +52,7 @@ int main(){
 		}
 		if(s == "2"){
 			time_t t = time(nullptr);
+			srand(t);
 			_encode_();
 			cout << "task 2:\ndone!\npress any key to continue\n";
 			cout << "in: " << time(nullptr) - t << " seconds\n";
@@ -62,6 +64,7 @@ int main(){
 			cin >> times;
 			times = min(max(times, 1), 1021);
 			time_t t = time(nullptr);
+			srand(t);
 			cls();
 			calls = quality = 0;
 			cout << "starting time: " << ctime(&t) << "tries: " << times << "\n--------\n";
@@ -73,6 +76,7 @@ int main(){
 		if(s == "4"){
 			renew();
 			time_t t = time(nullptr);
+			srand(t);
 			cls();
 			calls = quality = 0;
 			cout << "starting time: " << ctime(&t) << "--------\n";

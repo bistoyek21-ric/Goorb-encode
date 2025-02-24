@@ -22,52 +22,43 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 """
-
-# Import necessary libraries
-import numpy as np
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import SimpleRNN, Dense
-from tensorflow.keras.optimizers import Adam
+from tensorflow.keras.layers import Dense, LSTM, Conv1D, MaxPooling1D, Flatten, Reshape
 
-class MultiModelRNN:
-    def __init__(self, l, input_dim, timesteps):
-        self.l = l
-        self.models = []
-        self.input_dim = input_dim
-        self.timesteps = timesteps
-        # Create l models
-        for _ in range(l):
-            model = Sequential()
-            model.add(SimpleRNN(64, input_shape=(timesteps, input_dim), activation='relu', return_sequences=True))
-            model.add(SimpleRNN(64, activation='relu'))
-            model.add(Dense(1, activation='sigmoid'))
-            model.compile(loss='binary_crossentropy', optimizer=Adam(learning_rate=0.001), metrics=['accuracy'])
-            self.models.append(model)
+class BinaryClassifierRNN:
+    def __init__(self, input_size):
+        self.model = Sequential([
+            Reshape((input_size, 1), input_shape=(input_size,)),
+            LSTM(64),
+            Dense(32, activation='relu'),
+            Dense(1, activation='sigmoid')
+        ])
+        self._compile()
     
-    def train(self, X, y_list, epochs=10, batch_size=32):
-        for i in range(self.l):
-            self.models[i].fit(X, y_list[:, i], epochs=epochs, batch_size=batch_size)
+    def _compile(self):
+        self.model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
+    
+    def train(self, X_train, y_train, epochs=10, batch_size=32):
+        X_reshaped = X_train.reshape(-1, X_train.shape[1], 1)
+        self.history = self.model.fit(X_reshaped, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
     
     def predict(self, X):
-        predictions = np.zeros((X.shape[0], self.l))
-        for i in range(self.l):
-            predictions[:, i] = self.models[i].predict(X).flatten()
-        return predictions
+        X_reshaped = X.reshape(-1, X.shape[1], 1)
+        return self.model.predict(X_reshaped, verbose=0)
 
-if __name__ == '__main__':
-    # Number of models
-    l = 5
-    # Input dimension
-    input_dim = 20
-    # Number of timesteps
-    timesteps = 10
-    # Create instance of the class
-    multi_model = MultiModelRNN(l, input_dim, timesteps)
-    # Generate dummy data
-    X = np.random.rand(1000, timesteps, input_dim)
-    y_list = np.random.randint(2, size=(1000, l))
-    # Train the models
-    multi_model.train(X, y_list, epochs=10, batch_size=32)
-    # Predict with the models
-    predictions = multi_model.predict(X)
-    print(predictions)
+
+class CombinedClassifier:
+    def __init__(self, input_size, num_classifiers):
+        self.classifiers = [BinaryClassifierRNN(input_size) for _ in range(num_classifiers)]
+    
+    def train(self, X_train, y_train, epochs=10, batch_size=32):
+        for i, clf in enumerate(self.classifiers):
+            clf.train(X_train, y_train[:, i], epochs=epochs, batch_size=batch_size)
+    
+    def predict(self, X):
+        predictions = []
+        for clf in self.classifiers:
+            pred = clf.predict(X)
+            predictions.append(pred.flatten())
+        return np.column_stack(predictions)
