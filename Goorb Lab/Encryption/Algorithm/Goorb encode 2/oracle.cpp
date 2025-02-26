@@ -83,9 +83,9 @@ void ready_res(){
 int main(){
 	init();
 	ready_res();
-	int constexpr l_c_p = 256, bank_size = 256;
+	int constexpr l_c_p = 256, l_p_b = 8;
 	int x, y, supply;
-	cout << l_c_p << endl << bank_size << endl;
+	cout << l_c_p << endl << l_p_b << endl;
 	cin >> supply >> x >> y;
 	srand(time(nullptr));
 	string s;

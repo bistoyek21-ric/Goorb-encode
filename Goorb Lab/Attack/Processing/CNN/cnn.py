@@ -22,15 +22,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 """
-
+import numpy as np
 import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, LSTM, Conv1D, MaxPooling1D, Flatten, Reshape
+from tensorflow.keras.layers import Input, Dense, LSTM, Conv1D, MaxPooling1D, Flatten, Reshape
 
-class BinaryClassifierCNN:
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+
+class BinaryClassifier:
     def __init__(self, input_size):
         self.model = Sequential([
-            Reshape((input_size, 1), input_shape=(input_size,)),
+            Input(shape=(input_size,)),
+            Reshape((input_size, 1)),
             Conv1D(32, 3, activation='relu'),
             MaxPooling1D(2),
             Flatten(),
@@ -43,25 +47,42 @@ class BinaryClassifierCNN:
         self.model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     
     def train(self, X_train, y_train, epochs=10, batch_size=32):
-        X_reshaped = X_train.reshape(-1, X_train.shape[1], 1)
-        self.history = self.model.fit(X_reshaped, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
+        X_train = tf.reshape(X_train, [-1, X_train.shape[1], 1])
+        self.history = self.model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0)
     
     def predict(self, X):
-        X_reshaped = X.reshape(-1, X.shape[1], 1)
-        return self.model.predict(X_reshaped, verbose=0)
+        X = tf.reshape(X, [-1, X.shape[1], 1])
+        return self.model.predict(X, verbose=0)
 
 
 class CombinedClassifier:
-    def __init__(self, input_size, num_classifiers):
-        self.classifiers = [BinaryClassifierCNN(input_size) for _ in range(num_classifiers)]
+    def __init__(self, input_size, output_size):
+        self.input_size = input_size
+        self.output_size = output_size
+        self.classifiers = [BinaryClassifier(input_size) for _ in range(output_size)]
     
     def train(self, X_train, y_train, epochs=10, batch_size=32):
+        X_train = tf.convert_to_tensor(X_train)
+        y_train = tf.convert_to_tensor(y_train)
         for i, clf in enumerate(self.classifiers):
-            clf.train(X_train, y_train[:, i], epochs=epochs, batch_size=batch_size)
+            clf.train(X_train, y_train[i], epochs=epochs, batch_size=batch_size)
     
     def predict(self, X):
-        predictions = []
-        for clf in self.classifiers:
-            pred = clf.predict(X)
-            predictions.append(pred.flatten())
-        return np.column_stack(predictions)
+        X = tf.convert_to_tensor(X)
+        predictions = np.zeros(shape=(X.shape[0], self.output_size))
+        for i, clf in enumerate(self.classifiers):
+            predictions[i] = clf.predict(X).flatten()
+        return predictions
+
+
+if __name__ == '__main__':
+    processor = CombinedClassifier(5, 5)
+    X = np.random.randint(0, 2, size=(5, 5)).astype(float)
+    Y = np.random.randint(0, 2, size=(5, 5)).astype(float)
+    X = tf.convert_to_tensor(X)
+    print(X, flush=True)
+    print(X[0])
+    print('=' * 40)
+    processor.train(X_train=X, y_train=Y)
+    print('=' * 40)
+    print(processor.predict(X))

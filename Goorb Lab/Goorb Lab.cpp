@@ -26,43 +26,32 @@ SOFTWARE.
 #include <cstdlib>
 #include <string>
 #include <fstream>
-
 using namespace std;
 
-void runExecutableWithFiles(string executable, string input_file, string output_file){
-    std::string command;
-    #if defined(__unix__) || defined(__APPLE__)
-    command = executable + " < " + inputFile + " > " + outputFile + " &";
-    #else
-    command = "start /B " + executable + " < " + inputFile + " > " + outputFile;
-    #endif
-    system(command.c_str());
-    return;
-}
-
 int main(){
+    bool bistoyek_special_test = false;
     cout << "Goorb Lab\n";
 	cout << "Created by: 21\n";
+    cout << "- bistoyek21 RIC first mini lab\n";
+    cout << "- developed by Kasra Fouladi\n";
+    cout << "- a part of Goorb-encode research project\n";
 	cout << "___________________________________________\n\n";
-	cout << "\n-----------\n";
-	cout << "First step: enter the attacker's directory\n";
-	cout << "(If you want to use Goorb Lab's default security test just press the enter key)\n";
-	cout << "~  ";
-	string attacker = "";
-	getline(cin, attacker);
-	if(attacker.empty())
-        attacker = "./Attacks/main";
-    cout << "\n-----------------------------------------------------------\n";
-    cout << "Second step: enter the defender's directory\n";
+	string attacker = "", defender = "";
+    cout << "First step: enter the defender's address\n";
     cout << "~ ";
-    string defender;
-	getline(cin, defender);
-    const string ask_file = "./Intractive/ask.txt", answer_file = "./Intractive/answer.txt";
-    ofstream ask(ask_file);
-    ofstream ans(answer_file);
-    //ask << "" << '\n';
-    //ans << "" << '\n';
-    ask.close();
-    ans.close();
+    getline(cin, defender);
+    cout << "\n-----------------------------------------------------------\n";
+    cout << "Second step: enter the attacker's address\n";
+    cout << "(if you want to use bistoyek special test just press enter key)\n";
+    cout << "~ ";
+	getline(cin, attacker);
+	if(attacker.empty()){
+        bistoyek_special_test = true;
+        attacker = "./Attacks/attack.py";
+    }
+    cout << "\n-----------------------------------------------------------\n";
+    /*
+    intractive mechanism
+    */
 	return 0;
 }

@@ -26,7 +26,7 @@ import numpy as np
 
 # known plain-text queries
 def get_queries(n, m, k):
-    return np.random.randint(0, m, size=(k, 1))
+    return np.random.randint(0, 2, size=(k, m)).astype(float)
 
 if __name__ == '__main__':
-    print(get_queries(10, 256, 10))
+    print(get_queries(3, 3, 3))
