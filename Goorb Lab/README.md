@@ -31,7 +31,7 @@ strategy in processing the data achieved from queries.
 
 ### Final test
 After doing all queries and running out of supply, attacker have to decrypt 10000 randomly chosen\
-cipher-blocks and it's accuracy is equal to $\frac{true guesses}/10000$, after each attack results\
+cipher-blocks and it's accuracy is equal to $\frac{number\, of\, true\, guesses}{10000}$, after each attack results\
 will store in a csv file in a (k + 1)x4 grid while k is number of attemps, and in ${i+1}^{th}$ row\
 $i^{th}$ attacks parameters stored in this format: supply, x, y, accuracy\
 (first row value is equal to [supply, x, y, accuracy] to make it easier to work with the data)
