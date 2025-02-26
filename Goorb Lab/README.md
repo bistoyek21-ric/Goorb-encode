@@ -17,12 +17,24 @@ resulting from its application
 ***
 ## Logic
 
+### Oracle and Queries
 Imagine there is no clue about cryptography but it is guaranteed that the key(s)\
 of it won’t change in all of the attack time (clearly now it’s an easier problem),\
 attacker has limited amount of supply and there is an oracle that could answer these\
 queries:
 - For $a$ such $a \in A$ what is $F(a)$. (costs $x$)
 - For $b$ that $b \in B$ return $a$ random $a \in A$ which $F(a) = b$. (costs $y$)
+
+### Processing and Queries
+Attackers job is can splited into two main parts, strategy in sending queries and\
+strategy in processing the data achieved from queries.
+
+### Final test
+After doing all queries and running out of supply, attacker have to decrypt 10000 randomly chosen\
+cipher-blocks and it's accuracy is equal to $\frac{true guesses}/10000$, after each attack results\
+will store in a csv file in a (k + 1)x4 grid while k is number of attemps, and in ${i+1}^{th}$ row\
+$i^{th}$ attacks parameters stored in this format: supply, x, y, accuracy\
+(first row value is equal to [supply, x, y, accuracy] to make it easier to work with the data)
 
 ***
 ## License
