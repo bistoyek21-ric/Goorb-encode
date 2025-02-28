@@ -25,6 +25,12 @@ queries:
 - For $a$ such $a \in A$ what is $F(a)$. (costs $x$)
 - For $b$ that $b \in B$ return $a$ random $a \in A$ which $F(a) = b$. (costs $y$)
 
+### Oracle Implementation
+For each encryption you want to test at first choose a key and never change it during\
+the attack and after a preprocess (optional) it have to anwer the queries and it has to\
+**flush** the output each time due to intractive mechanism of  the test.\
+(read the oracle code for Goorb encode 1 and 2 for better undrestanding)
+
 ### Processing and Queries
 Attackers job is can splited into two main parts, strategy in sending queries and\
 strategy in processing the data achieved from queries.

@@ -45,7 +45,7 @@ class BinaryClassifier:
         self.model.compile(optimizer='adam', loss='binary_crossentropy', metrics=['accuracy'])
     
     def train(self, X_train, y_train, epochs=10, batch_size=32):
-        X_train = tf.reshape(X_train, [-1, X_train.shape[1], 1])
+        #X_train = tf.reshape(X_train, [-1, X_train.shape[1], 1])
         self.model.fit(X_train, y_train, epochs=epochs, batch_size=batch_size, verbose=0, validation_split=0.2)
     
     def predict(self, X):

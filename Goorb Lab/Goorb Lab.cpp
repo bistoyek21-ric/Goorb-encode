@@ -29,29 +29,30 @@ SOFTWARE.
 using namespace std;
 
 int main(){
-    bool bistoyek_special_test = false;
     cout << "Goorb Lab\n";
 	cout << "Created by: 21\n";
     cout << "- bistoyek21 RIC first mini lab\n";
     cout << "- developed by Kasra Fouladi\n";
     cout << "- a part of Goorb-encode research project\n";
 	cout << "___________________________________________\n\n";
-	string attacker = "", defender = "";
-    cout << "First step: enter the defender's address\n";
+	cout << "To use Goorb Lab the system has to be able to run python3 codes\n";
+	cout << "\n~~~~~~~~~~~~~~~~~~~\n";
+	string run_attacker, run_defender;
+    cout << "First step: enter a command line that runs the defender (mind the direcroty)\n";
     cout << "~ ";
-    getline(cin, defender);
+    getline(cin, run_defender);
     cout << "\n-----------------------------------------------------------\n";
-    cout << "Second step: enter the attacker's address\n";
-    cout << "(if you want to use bistoyek special test just press enter key)\n";
+    cout << "Second step: enter the a command line that runs attacker (mind the directory)\n";
     cout << "~ ";
-	getline(cin, attacker);
-	if(attacker.empty()){
-        bistoyek_special_test = true;
-        attacker = "./Attacks/attack.py";
-    }
+	getline(cin, run_attacker);
     cout << "\n-----------------------------------------------------------\n";
-    /*
-    intractive mechanism
-    */
+    ofstream a("./intractor/a.py");
+    a << "import os\nos.system(\"cd ../ && " << run_defender << "\")\n";
+    a.close();
+    ofstream b("./intractor/b.py");
+    b << "import os\nos.system(\"cd ../ && " << run_attacker << "\")\n";
+    b.close();
+    system("python ./intractor/intractor.py");
+    cout << "done! :)" << '\n';
 	return 0;
 }
