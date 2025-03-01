@@ -80,10 +80,10 @@ def __main__():
 
     if attack_type == 1 or attack_type == 2:
         if attack_type == 1:
-            queries = get_queries(input_bits, 9, supply // (511 * price[0]))
+            queries = get_queries(input_bits, 9, supply // (511 * price[0]) + 1)
         else:
             sum = 1 + input_bits
-            queries = get_queries(input_bits, 2,  supply // (sum * price[0]))
+            queries = get_queries(input_bits, 2, supply // (sum * price[0]) + 1)
         tmp = supply
         for query in queries:
             if tmp < price[0]:
