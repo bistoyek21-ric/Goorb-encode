@@ -127,7 +127,7 @@ def __main__():
     accuracy = int(input()) / 10000.0
 
     with open(dir + '/results.csv', 'a', newline='') as f:
-        writer = csv.writer(f, delimiter=', ')
+        writer = csv.writer(f, delimiter=',')
         writer.writerow([supply, price[0], price[1], accuracy])
     
     return
