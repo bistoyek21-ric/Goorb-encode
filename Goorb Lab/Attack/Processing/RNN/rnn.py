@@ -63,13 +63,13 @@ class CombinedClassifier:
         X_train = tf.convert_to_tensor(X_train)
         y_train = tf.convert_to_tensor(y_train)
         for i, clf in enumerate(self.classifiers):
-            clf.train(X_train, y_train[i], epochs=epochs, batch_size=batch_size)
+            clf.train(X_train, y_train[:, i], epochs=epochs, batch_size=batch_size)
     
     def predict(self, X):
         X = tf.convert_to_tensor(X)
         predictions = np.zeros(shape=(X.shape[0], self.output_size))
         for i, clf in enumerate(self.classifiers):
-            predictions[i] = clf.predict(X).flatten()
+            predictions[:, i] = clf.predict(X).flatten()
         return predictions
 
 

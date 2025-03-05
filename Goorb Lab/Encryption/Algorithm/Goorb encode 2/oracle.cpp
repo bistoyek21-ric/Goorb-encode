@@ -28,7 +28,7 @@ cipher_block random_block(){
     cipher_block a;
     a.s = "";
     for(int i = 0; i < 64; ++i)
-        a.s += (char)('A' + rand() & 15);
+        a.s += (char)('A' + (rand() & 15));
 	return a;
 }
 
@@ -85,8 +85,8 @@ int main(){
 	ready_res();
 	int constexpr l_c_p = 256, l_p_b = 8;
 	int x, y, supply;
-	cout << l_c_p << endl << l_p_b << endl;
 	cin >> supply >> x >> y;
+	cout << l_c_p << endl << l_p_b << endl;
 	srand(time(nullptr));
 	string s;
 	while(min(x, y) <= supply){
@@ -123,7 +123,7 @@ int main(){
 		}
 	}
 	cout << "Final_Tests" << endl;
-	int cnt = 0;
+	vector<int> ans;
 	for(int i = 0; i < 10000; ++i){
         cipher_block cb = random_block();
         ofstream encoded("./messages/" + keysname + "/encoded.txt");
@@ -134,10 +134,14 @@ int main(){
         _decode_();
         ifstream decoded("./messages/" + keysname + "/decoded.txt");
         unsigned char p_b = decoded.get();
+        ans.push_back((int)p_b);
         decoded.close();
-        int p_b_1;
-        cin >> p_b_1;
-        if((int)p_b == p_b_1)
+	}
+	int cnt = 0;
+	for(int i = 0; i < 10000; ++i){
+        int p_b;
+        cin >> p_b;
+        if(p_b == ans[i])
             ++cnt;
 	}
 	cout << cnt << endl;

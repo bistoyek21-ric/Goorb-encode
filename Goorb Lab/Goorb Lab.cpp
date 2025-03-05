@@ -35,14 +35,14 @@ int main(){
     cout << "- developed by Kasra Fouladi\n";
     cout << "- a part of Goorb-encode research project\n";
 	cout << "___________________________________________\n\n";
-	cout << "To use Goorb Lab the system has to be able to run python3 codes\n";
+	cout << "To use Goorb Lab the system has to be able to run python3 codes\nRun each program (including this one) in its directory to avoid errors\n";
 	cout << "\n~~~~~~~~~~~~~~~~~~~\n";
 	string run_attacker, run_defender;
     cout << "First step: enter a command line that runs the defender (mind the direcroty)\n";
     cout << "~ ";
     getline(cin, run_defender);
     cout << "\n-----------------------------------------------------------\n";
-    cout << "Second step: enter the a command line that runs attacker (mind the directory)\n";
+    cout << "Second step: enter a command line that runs attacker (mind the directory)\n";
     cout << "~ ";
 	getline(cin, run_attacker);
     cout << "\n-----------------------------------------------------------\n";
@@ -52,7 +52,7 @@ int main(){
     ofstream b("./intractor/b.py");
     b << "import os\nos.system(\"cd ../ && " << run_attacker << "\")\n";
     b.close();
-    system("python ./intractor/intractor.py");
+    system("cd ./intractor && python intractor.py");
     cout << "done! :)" << '\n';
 	return 0;
 }

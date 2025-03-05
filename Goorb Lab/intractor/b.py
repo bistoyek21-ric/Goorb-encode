@@ -1,2 +1,2 @@
 import os
-os.system("cd ../ && touch goorba.txt")
+os.system("cd ../ && cd ./Attack && python attack.py")

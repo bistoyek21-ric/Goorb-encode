@@ -59,10 +59,9 @@ def vectorize_cipher_block(s, input_bits):
 
 
 def __main__():
-
     price = [0, 0]
-    attack_type, supply, price[0], price[1], dir = open('./description.txt', 'r').read().split()
-    
+    attack_type, supply, price[0], price[1], dir = open('./description.txt', 'r').read().split('\n')
+
     attack_type = int(attack_type)
     supply = int(supply)
     price[0] = int(price[0])
@@ -116,14 +115,19 @@ def __main__():
     processor.train(X_train=X_train, y_train=y_train)
 
     response = input()
+    X = np.zeros(shape=(10000, input_bits))
     for i in range(10000):
-        X = np.array([vectorize_cipher_block(input(), input_bits)])
-        print(standard_plain_block(processor.predict(X)[0]), flush=True)
+        X[i] = vectorize_cipher_block(input(), input_bits)
+    
+    predictions = processor.predict(np.array(X))
+
+    for i in range(10000):
+        print(standard_plain_block(predictions[i]), flush=True)
     
     accuracy = int(input()) / 10000.0
 
-    with open(dir + '/results.csv', 'w+', newline='') as f:
-        writer = csv.writer(f, delimiter=',')
+    with open(dir + '/results.csv', 'a', newline='') as f:
+        writer = csv.writer(f, delimiter=', ')
         writer.writerow([supply, price[0], price[1], accuracy])
     
     return

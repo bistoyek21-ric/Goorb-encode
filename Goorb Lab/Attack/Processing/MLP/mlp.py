@@ -27,9 +27,6 @@ import tensorflow as tf
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Input
 
-from concurrent.futures import ThreadPoolExecutor
-import time
-
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
@@ -64,19 +61,19 @@ class CombinedClassifier:
         X_train = tf.convert_to_tensor(X_train)
         y_train = tf.convert_to_tensor(y_train)
         for i, clf in enumerate(self.classifiers):
-            clf.train(X_train, y_train[i], epochs=epochs, batch_size=batch_size)
+            clf.train(X_train, y_train[:, i], epochs=epochs, batch_size=batch_size)
     
     def predict(self, X):
         X = tf.convert_to_tensor(X)
         predictions = np.zeros(shape=(X.shape[0], self.output_size))
         for i, clf in enumerate(self.classifiers):
-            predictions[i] = clf.predict(X).flatten()
+            predictions[:, i] = clf.predict(X).flatten()
         return predictions
 
 
 if __name__ == '__main__':
-    processor = CombinedClassifier(5, 5)
-    X = np.random.randint(0, 2, size=(5, 5)).astype(float)
+    processor = CombinedClassifier(10, 5)
+    X = np.random.randint(0, 2, size=(5, 10)).astype(float)
     Y = np.random.randint(0, 2, size=(5, 5)).astype(float)
     X = tf.convert_to_tensor(X)
     print(X, flush=True)
