@@ -41,6 +41,8 @@ SOFTWARE.
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <signal.h>
+#include <unistd.h>
+#include <stdio.h>
 
 int constexpr BK = 127, EN = 10;
 
