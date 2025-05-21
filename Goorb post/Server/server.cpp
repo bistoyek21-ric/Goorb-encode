@@ -104,16 +104,22 @@ int main(){
 	std::cout << "Raz protocol\n";
 	std::cout << "Created by: 21\n";
 	std::cout << "____________________________________________________\n\n";
-    	#if !defined(__unix__) && !defined(__APLLE__)
-    	WSADATA wsaData;
-    	if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
-        	std::cerr << "WSAStartup failed" << std::endl;
-        	return 1;
-    	}
-    	#endif
+    #if !defined(__unix__) && !defined(__APLLE__)
+    WSADATA wsaData;
+	if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
+        std::cerr << "WSAStartup failed" << std::endl;
+    	return 1;
+    }
+    #endif
+	std::cout << "Server IP: ";
+	#ifdef LOCALIP
 	char host[256];
 	gethostname(host, sizeof(host));
-	std::cout << "Server IP: " << inet_ntoa(*((struct in_addr*)gethostbyname(host)->h_addr_list[0])) << '\n';
+	std::cout << inet_ntoa(*((struct in_addr*)gethostbyname(host)->h_addr_list[0]));
+	#else
+	std::cout.flush();
+	system("curl -s https://api.ipify.org");
+	#endif
 	std::cout << "Running on port: " << PORT << '\n';
 	std::cout << "-------------\n\n";
 	int server_socket, client_socket;
@@ -181,7 +187,7 @@ int main(){
 			break;
 	}
 	for(int i = 0; i < 2; ++i)
-        	send(client[i], "0 0 ", 4, 0);
+        send(client[i], "0 0 ", 4, 0);
 	close(client[0]);
 	close(client[1]);
 	close(server_socket_);
