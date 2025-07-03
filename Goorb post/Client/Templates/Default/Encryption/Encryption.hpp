@@ -39,7 +39,7 @@ class Client{
     bool open = false;
 
     void start(const string& server_ip, int server_port){
-        #if !defined(__unix__) && !defined(__APLLE__)
+        #if !defined(__unix__) && !defined(__APPLE__)
         WSADATA wsaData;
         if(WSAStartup(MAKEWORD(2, 2), &wsaData) != 0){
             cout << "WSAStartup failed" << '\n';
